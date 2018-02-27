@@ -1,2 +1,3 @@
 # Stata datafiles
 *.dta
+!data/raw/*.dta
