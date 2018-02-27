@@ -1,2 +1,5 @@
 # Stata datafiles
 *.dta
+
+# Stata logfiles
+*.smcl
