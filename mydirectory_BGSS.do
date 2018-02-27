@@ -35,8 +35,6 @@ global tables_tex "${tables}tex/"
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Source datafiles
 
-global evs3 "${data}/EVS_3/ZA3778_v3-0-1.dta" // EVS 3
-global evs4 "${data}/EVS_4/ZA4753_v1-1-0.dta" // EVS 4
 global evslg "${data}/EVS_longitudinal/ZA4804_v3-0-0.dta" // EVS Longitudinal
 
 global ess1 "${data}/ESS_1/Country file/ESS1DE.dta" // ESS 1 Country file
