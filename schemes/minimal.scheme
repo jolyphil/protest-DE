@@ -1,0 +1,57 @@
+* Philippe Joly's minimal plot scheme
+* Inspired by Bischof (2017)
+
+#include s2color
+label "minimal"
+
+anglestyle vertical_tick horizontal
+
+clockdir legend_position     3
+
+color background      white
+color plotregion      white
+color plotregion_line white
+
+color grid         ltbluishgray
+color major_grid   ltbluishgray
+color minor_grid   ltbluishgray
+
+color legend_line        none
+
+color p1     black
+color p2     gs10
+color p3     sky
+color p4     turquoise
+color p5     orangebrown
+color p6     reddish
+color p7     vermillon
+color p8     sea
+color p9     ananas
+
+gsize axis_title		medsmall
+gsize axis_title_gap	medium
+gsize tick            	zero
+gsize tick_label		small
+
+gsize key_label  small
+gsize legend_key_ysize  small  
+gsize zyx2legend_key_ysize  small
+
+linepattern grid        solid
+linepattern major_grid  solid
+linepattern minor_grid  solid
+linepattern axisline    blank
+
+linewidth p            medthin
+
+gsize legend_key_ysize  huge
+
+numstyle legend_cols      1
+
+symbolsize p            small
+
+yesno draw_major_vgrid       yes
+yesno draw_major_hgrid       yes
+
+yesno grid_draw_min          yes
+yesno grid_draw_max          yes
