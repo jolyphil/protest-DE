@@ -67,4 +67,4 @@ global ess_miss "${data_raw}ESS_miss/ESS_miss.do" // Provided by ESS, handles mi
 * 	Adds a scheme directory to the beginning of the search path stored in the 
 * 	global macro S_ADO.
 
-//adopath ++ "${schemes}"
+adopath ++ "${schemes}"
