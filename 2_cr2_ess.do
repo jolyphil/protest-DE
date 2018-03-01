@@ -32,12 +32,8 @@ do "${ess_miss}"
 gen id = _n
 
 * ______________________________________________________________________________
-* Clean ESS data
+* Depedent variables
 
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Dependent variables
-
-* Creates variables for recent protest: petition, boycott and demonstration
 label define poliactlb 0 "Not done" 1 "Have done", modify
 
 local varname1 "petition"
@@ -50,17 +46,19 @@ foreach var of varlist sgnptit bctprd pbldmn {
 	_crcslbl `varname`j'' `var' // Copies var. label
 	label values `varname`j'' poliactlb // Copies label values
 }
-*
-
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* ______________________________________________________________________________
 * East/West Germany
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Based on region where interview was conducted
 
-*Based on region where interview was conducted
 recode intewde (2 = 0), gen(east_intv) // west=0, east=1
 label define eastlb				///
 	0 "West Germany"			///
 	1 "East Germany", modify
 label values east_intv eastlb
+
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Based on where respondent grew up
 
 * Age when moved to East Germany
 gen agemovetoeast = splow5de - yrbrn if splow5de!=. & splow5de<=2017
@@ -81,15 +79,15 @@ gen east_soc = (east_intv==1 & westgermanineast==0) | eastgermaninwest==1
 label variable east_soc "Region of early socialization"
 label values east_soc eastlb
 
-
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* ______________________________________________________________________________
 * Periods, cohorts and generations
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Period variable
 gen period=essround
 recode period (1=2002) (2=2004) (3=2006) (4=2008) (5=2010) (6=2012) (7=2014) (8=2016)
 egen pickone_p=tag(period)
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Cohort variable
 local c_min=1910
 local c_max=1990
@@ -98,32 +96,43 @@ gen cohort=.
 forvalues c = `c_min'(`c_d')`c_max' {
 	replace cohort=`c' if yrbrn>=`c' & yrbrn<=(`c'+`c_d'-1)
 }
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Generations
 gen generation=1 if yrbrn<=1933
 replace generation=2 if yrbrn>=1934 & yrbrn<=1974
 replace generation=3 if yrbrn>=1975
 
+* ______________________________________________________________________________
+* Socio-demographic and socio-economic variables
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Other controls
+* Gender | gndr --> female
+recode gndr (1=0) (2=1), gen(female) // male=0, female=1
+_crcslbl female gndr
+label define femalelb				///
+	0 "Male"						///
+	1 "Female", modify
+label values female femalelb
 
-* RESOURCES
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Age
+drop age
+gen age=agea if agea<=100
+label variable age "Age of respondent"
 
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-*Highest level of education | eisced --> edu
-recode eisced (1/2 = 1) (3/4 = 2) (5/7 = 3) (else = .), gen(edu)
-label variable edu "Highest level of education"
-label define groups3lb				///
-	1 "Lower"						///
-	2 "Middle"						///
-	3 "Upper", modify
-label values edu groups3lb
-* Note: see documentation on education measurement: 
-* www.europeansocialsurvey.org/docs/round6/survey/ESS6_appendix_a1_e02_0.pdf
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Highest level of education | eisced --> edu
+gen edu = eisced
+_crcslbl edu eisced
 
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Income | hinctnt, hinctnta --> incquart (income in quartiles)
+
+* Note:	This procedures harmonizes 2 different measures of income. The ESS 
+*		changed its methodology starting round 4. 
+* 		See:
+* 		https://www.europeansocialsurvey.org/docs/round4/survey/ESS4_appendix_a5_e05_0.pdf
+
 gen incquart=.
 forvalues i = 1(1)3 {
 	xtile incquart_`i' = hinctnt if (essround==`i'), nq(4)
@@ -142,13 +151,17 @@ label define incquartlb		///
 	3 "Q3"					///
 	4 "Q4", modify
 label values incquart incquartlb
-* Note: 
-* This procedures harmonizes 2 different measures of income. The ESS changed its
-* methodology starting round 4. 
-* See:
-* https://www.europeansocialsurvey.org/docs/round4/survey/ESS4_appendix_a5_e05_0.pdf
 
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Student | mnactic --> student (0:no, 1:yes)
+gen student=(mnactic==2) if (mnactic<.)
+label variable student "Student"
+label define studentlb	///
+	0 "Not student"		///
+	1 "Student", modify
+label values student studentlb
+
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Unemployed | mnactic --> unemp (0:no, 1:yes)
 gen unemp=(mnactic==3 | mnactic==4) if (mnactic<.)
 label variable unemp "Unemployed"
@@ -157,7 +170,16 @@ label define unemplb	///
 	1 "Yes", modify
 label values unemp unemplb
 
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Member of trade union | mbtru --> union
+recode mbtru (3=0) (1 2=1), gen(union) // male=0, female=1
+_crcslbl union mbtru
+label define unionlb			///
+	0 "No"						///
+	1 "Yes, currently or previously", modify
+label values union unionlb
+
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Size of town | domicil --> city
 gen city = domicil
 label variable city "Size of town/city"
@@ -169,6 +191,81 @@ label define citylb							///
 	4 "Suburbs or outskirts of big city"	///
 	5 "A big city", modify
 label values city citylb
+
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Born in Germany | brncntr --> native
+recode brncntr (2=0), gen(native)
+_crcslbl native brncntr
+label define noyeslb			///
+	0 "No"						///
+	1 "Yes", modify
+label values native noyeslb
+
+
+* ______________________________________________________________________________
+* Political attitudes
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Political interest | polint --> polintr
+
+gen polint = polintr
+_crcslbl polint polintr
+replace polint = 4 + 1 - polint // Inverses ordinal scale
+label define polintlb				///
+	1 "Not at all interested"		///
+	2 "Hardly interested"			///
+	3 "Quite interested"			///
+	4 "Very interested", modify
+label values polint polintlb
+
+
+
+
+/*
+
+ctzcntr         double  %10.0g     ctzcntr    Citizen of country
+ctzship         str2    %2s                   Citizenship
+brncntr         double  %10.0g     brncntr    Born in country
+cntbrth         str2    %2s                   Country of birth
+
+trunn           double  %10.0g     trunn      Trade union, last 12 months: none apply
+trummb          double  %10.0g     trummb     Trade union, last 12 months: member
+truptp          double  %10.0g     truptp     Trade union, last 12 months: participated
+trudm           double  %10.0g     trudm      Trade union, last 12 months: donated money
+truvw           double  %10.0g     truvw      Trade union, last 12 months: voluntary work
+truref          double  %10.0g     truref     Trade union, last 12 months: refusal
+truna           double  %10.0g     truna      Trade union, last 12 months: no answer
+
+pdwrk           double  %10.0g     pdwrk      Doing last 7 days: paid work
+edctn           double  %10.0g     edctn      Doing last 7 days: education
+uempla          double  %10.0g     uempla     Doing last 7 days: unemployed, actively looking for job
+uempli          double  %10.0g     uempli     Doing last 7 days: unemployed, not actively looking for job
+dsbld           double  %10.0g     dsbld      Doing last 7 days: permanently sick or disabled
+rtrd            double  %10.0g     rtrd       Doing last 7 days: retired
+cmsrv           double  %10.0g     cmsrv      Doing last 7 days: community or military service
+hswrk           double  %10.0g     hswrk      Doing last 7 days: housework, looking after children, others
+dngoth          double  %10.0g     dngoth     Doing last 7 days: other
+dngdk           double  %10.0g     dngdk      Doing last 7 days: don't know
+dngref          double  %10.0g     dngref     Doing last 7 days: refusal
+dngna           double  %10.0g     dngna      Doing last 7 days: no answer
+mainact         double  %41.0g     mainact    Main activity last 7 days
+mnactic         double  %41.0g     mnactic    Main activity, last 7 days. All respondents. Post coded
+
+iscoco          double  %46.0g     iscoco     Occupation, ISCO88 (com)
+
+hinctnt         double  %10.0g     hinctnt    Household's total net income, all sources
+hincfel         double  %36.0g     hincfel    Feeling about household's income nowadays
+
+
+*/
+
+
+
+
+
+
+
+
+
 
 
 * VALUES/ATTITUDES
