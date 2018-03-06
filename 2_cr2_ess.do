@@ -47,16 +47,77 @@ foreach var of varlist sgnptit bctprd pbldmn {
 	label values `varname`j'' poliactlb // Copies label values
 }
 * ______________________________________________________________________________
+* Bundesland | region, regionde --> land
+
+gen land = .
+replace land = 1 if regionde == 8  | region == "DE1" // Baden-Wuerttemberg
+replace land = 2 if regionde == 9  | region == "DE2" // Bayern
+replace land = 3 if regionde == 11 | region == "DE3" // Berlin
+replace land = 4 if regionde == 12 | region == "DE4" // Brandenburg
+replace land = 5 if regionde == 4  | region == "DE5" // Bremen
+replace land = 6 if regionde == 2  | region == "DE6" // Hamburg
+replace land = 7 if regionde == 6  | region == "DE7" // Hessen
+replace land = 8 if regionde == 13 | region == "DE8" // Mecklenburg-Vorpommern
+replace land = 9 if regionde == 3  | region == "DE9" // Niedersachsen
+replace land = 10 if regionde == 5  | region == "DEA" // Nordrhein-Westfalen
+replace land = 11 if regionde == 7  | region == "DEB" // Rheinland-Pfalz
+replace land = 12 if regionde == 10 | region == "DEC" // Saarland
+replace land = 13 if regionde == 14 | region == "DED" // Sachsen
+replace land = 14 if regionde == 15 | region == "DEE" // Sachsen-Anhalt
+replace land = 15 if regionde == 1  | region == "DEF" // Schleswig-Holstein
+replace land = 16 if regionde == 16 | region == "DEG" // Thueringen
+
+label variable land "Land"
+label define landlb				///
+	1  "Baden-Wuerttemberg"		///
+	2  "Bayern"					///
+	3  "Berlin"					///
+	4  "Brandenburg"			///
+	5  "Bremen"					///
+	6  "Hamburg"				///
+	7  "Hessen"					///
+	8  "Mecklenburg-Vorpommern" ///
+	9  "Niedersachsen"			///
+	10 "Nordrhein-Westfalen"	///
+	11 "Rheinland-Pfalz"		///
+	12 "Saarland"				///
+	13 "Sachsen"				///
+	14 "Sachsen-Anhalt"			///
+	15 "Schleswig-Holstein"		///
+	16 "Thueringen", modify
+label values land landlb
+
+* ______________________________________________________________________________
 * East/West Germany
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Based on region where interview was conducted
 
-recode intewde (2 = 0), gen(east_intv) // west=0, east=1
+recode intewde (2 = 0), gen(eastintv) // west=0, east=1
 label define eastlb				///
 	0 "West Germany"			///
 	1 "East Germany", modify
-label values east_intv eastlb
+label values eastintv eastlb
 
+* (!) Impossible values:  respondents interviewed in East Germany, 
+*     but in a Western region (or vice versa) --> recode as missing
+replace eastintv = . if eastintv == 0 ///
+	& (	land == "BB" | ///
+		land == "MV" | ///
+		land == "SN" | ///
+		land == "ST" | ///
+		land == "TH")
+replace eastintv = . if eastintv == 1 ///
+	& (	land == "BW" | ///
+		land == "BY" | ///
+		land == "HB" | ///
+		land == "HE" | ///
+		land == "HH" | ///
+		land == "NI" | ///
+		land == "NW" | ///
+		land == "RP" | ///
+		land == "SH" | ///
+		land == "SL")
+		
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Based on where respondent grew up
 
@@ -75,9 +136,9 @@ gen westgermanineast = ((agemovetoeast>15)&(agemovetoeast!=.))
 gen eastgermaninwest = ((agemovetowest>15)&(agemovetowest!=.))
 
 * Socialized in East Germany
-gen east_soc = (east_intv==1 & westgermanineast==0) | eastgermaninwest==1
-label variable east_soc "Region of early socialization"
-label values east_soc eastlb
+gen eastsoc = (eastintv==1 & westgermanineast==0) | eastgermaninwest==1
+label variable eastsoc "Region of early socialization"
+label values eastsoc eastlb
 
 * ______________________________________________________________________________
 * Periods, cohorts and generations
