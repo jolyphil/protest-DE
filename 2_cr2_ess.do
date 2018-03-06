@@ -50,15 +50,15 @@ foreach var of varlist sgnptit bctprd pbldmn {
 * Bundesland | region, regionde --> land
 
 gen land = .
-replace land = 1 if regionde == 8  | region == "DE1" // Baden-Wuerttemberg
-replace land = 2 if regionde == 9  | region == "DE2" // Bayern
-replace land = 3 if regionde == 11 | region == "DE3" // Berlin
-replace land = 4 if regionde == 12 | region == "DE4" // Brandenburg
-replace land = 5 if regionde == 4  | region == "DE5" // Bremen
-replace land = 6 if regionde == 2  | region == "DE6" // Hamburg
-replace land = 7 if regionde == 6  | region == "DE7" // Hessen
-replace land = 8 if regionde == 13 | region == "DE8" // Mecklenburg-Vorpommern
-replace land = 9 if regionde == 3  | region == "DE9" // Niedersachsen
+replace land = 1  if regionde == 8  | region == "DE1" // Baden-Wuerttemberg
+replace land = 2  if regionde == 9  | region == "DE2" // Bayern
+replace land = 3  if regionde == 11 | region == "DE3" // Berlin
+replace land = 4  if regionde == 12 | region == "DE4" // Brandenburg
+replace land = 5  if regionde == 4  | region == "DE5" // Bremen
+replace land = 6  if regionde == 2  | region == "DE6" // Hamburg
+replace land = 7  if regionde == 6  | region == "DE7" // Hessen
+replace land = 8  if regionde == 13 | region == "DE8" // Mecklenburg-Vorpommern
+replace land = 9  if regionde == 3  | region == "DE9" // Niedersachsen
 replace land = 10 if regionde == 5  | region == "DEA" // Nordrhein-Westfalen
 replace land = 11 if regionde == 7  | region == "DEB" // Rheinland-Pfalz
 replace land = 12 if regionde == 10 | region == "DEC" // Saarland
@@ -125,6 +125,8 @@ replace eastintv = . if eastintv == 1 ///
 gen agemovetoeast = splow5de - yrbrn if splow5de!=. & splow5de<=2017
 replace agemovetoeast = n5b_1 - yrbrn if n5b_1!=. & n5b_1<=2017 // ESS 5 
 
+// (agemovetoeast - 15) / 11 
+
 * Age when moved to West Germany
 gen agemovetowest = splow4de - yrbrn if splow4de!=. & splow4de<=2017
 replace agemovetowest = n5a_1 - yrbrn if n5a_1!=. & n5a_1<=2017 // ESS 5
@@ -177,7 +179,7 @@ label values female femalelb
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Age
-drop age
+drop age // (!) (?)
 gen age=agea if agea<=100
 label variable age "Age of respondent"
 
