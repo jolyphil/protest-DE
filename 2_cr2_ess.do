@@ -68,22 +68,22 @@ replace land = 15 if regionde == 1  | region == "DEF" // Schleswig-Holstein
 replace land = 16 if regionde == 16 | region == "DEG" // Thueringen
 
 label variable land "Land"
-label define landlb				///
-	1  "Baden-Wuerttemberg"		///
-	2  "Bayern"					///
-	3  "Berlin"					///
-	4  "Brandenburg"			///
-	5  "Bremen"					///
-	6  "Hamburg"				///
-	7  "Hessen"					///
+label define landlb ///
+	1  "Baden-Wuerttemberg" ///
+	2  "Bayern" ///
+	3  "Berlin" ///
+	4  "Brandenburg" ///
+	5  "Bremen" ///
+	6  "Hamburg" ///
+	7  "Hessen" ///
 	8  "Mecklenburg-Vorpommern" ///
-	9  "Niedersachsen"			///
-	10 "Nordrhein-Westfalen"	///
-	11 "Rheinland-Pfalz"		///
-	12 "Saarland"				///
-	13 "Sachsen"				///
-	14 "Sachsen-Anhalt"			///
-	15 "Schleswig-Holstein"		///
+	9  "Niedersachsen" ///
+	10 "Nordrhein-Westfalen" ///
+	11 "Rheinland-Pfalz" ///
+	12 "Saarland" ///
+	13 "Sachsen" ///
+	14 "Sachsen-Anhalt" ///
+	15 "Schleswig-Holstein" ///
 	16 "Thueringen", modify
 label values land landlb
 
