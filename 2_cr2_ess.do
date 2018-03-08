@@ -88,9 +88,7 @@ label define landlb ///
 label values land landlb
 
 * ______________________________________________________________________________
-* East/West Germany
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Based on region where interview was conducted
+* East/West Germany: Region where interview was conducted
 
 recode intewde (2 = 0), gen(eastintv) // west=0, east=1
 label define eastlb				///
@@ -101,69 +99,113 @@ label values eastintv eastlb
 * (!) Impossible values:  respondents interviewed in East Germany, 
 *     but in a Western region (or vice versa) --> recode as missing
 replace eastintv = . if eastintv == 0 ///
-	& (	land == "BB" | ///
-		land == "MV" | ///
-		land == "SN" | ///
-		land == "ST" | ///
-		land == "TH")
+	& (	land == 4  | ///
+		land == 8  | ///
+		land == 13 | ///
+		land == 14 | ///
+		land == 16)
 replace eastintv = . if eastintv == 1 ///
-	& (	land == "BW" | ///
-		land == "BY" | ///
-		land == "HB" | ///
-		land == "HE" | ///
-		land == "HH" | ///
-		land == "NI" | ///
-		land == "NW" | ///
-		land == "RP" | ///
-		land == "SH" | ///
-		land == "SL")
-		
+	& (	land == 1  | ///
+		land == 2  | ///
+		land == 5  | ///
+		land == 6  | ///
+		land == 7  | ///
+		land == 9  | ///
+		land == 10 | ///
+		land == 11 | ///
+		land == 12 | ///
+		land == 15)
+* ______________________________________________________________________________
+* Political socialization based on where respondent grew up
+
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Based on where respondent grew up
+* Current Age | agea --> age
+drop age
+gen age = agea if agea <= 100
+label variable age "Age of respondent"
 
-* Age when moved to East Germany
-gen agemovetoeast = splow5de - yrbrn if splow5de!=. & splow5de<=2017
-replace agemovetoeast = n5b_1 - yrbrn if n5b_1!=. & n5b_1<=2017 // ESS 5 
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Lived in East Germany before 1990 | splow2de, n3 --> eastbefore1990
+* Note: keep German natives only.
 
-// (agemovetoeast - 15) / 11 
+recode splow2de (1=1) (2=0) (else=.), gen(eastbefore1990)
+recode n3 (1=1) (2=0) (else=.), gen(eastbefore1990_ess5) // ESS 5
+replace eastbefore1990 = eastbefore1990_ess5 if eastbefore1990_ess5 != .
+drop eastbefore1990_ess5
 
-* Age when moved to West Germany
-gen agemovetowest = splow4de - yrbrn if splow4de!=. & splow4de<=2017
-replace agemovetowest = n5a_1 - yrbrn if n5a_1!=. & n5a_1<=2017 // ESS 5
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Age when moved to East Germany | --> agemovetoeast
+gen agemovetoeast = splow5de - yrbrn if splow5de != . & splow5de <= 2017
+replace agemovetoeast = n5b_1 - yrbrn if n5b_1 != . & n5b_1 <= 2017 // ESS 5
+replace agemovetoeast = . if agemovetoeast < 0 
 
-* West germans living in East Germany
-gen westgermanineast = ((agemovetoeast>15)&(agemovetoeast!=.))
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Age when moved to West Germany | --> agemovetowest
+gen agemovetowest = splow4de - yrbrn if splow4de != . & splow4de <= 2017
+replace agemovetowest = n5a_1 - yrbrn if n5a_1 != . & n5a_1 <= 2017 // ESS 5
+replace agemovetowest = . if agemovetowest < 0 
 
-* East germans living in West Germany
-gen eastgermaninwest = ((agemovetowest>15)&(agemovetowest!=.))
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Total years of political socialization | --> soctotyears
+gen soctotyears = .
+replace soctotyears = 11 if age > 25
+replace soctotyears = age - 15 if age >= 15 & age <= 25
 
-* Socialized in East Germany
-gen eastsoc = (eastintv==1 & westgermanineast==0) | eastgermaninwest==1
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Years of political socialization in East Germany
+gen socyearseast = .
+
+* (1) Lived in the GDR before 1990, still living in East Germany
+replace socyearseast = 11 if age > 25 ///
+	& eastintv == 1 & eastbefore1990 == 1
+replace socyearseast = age - 15 if age >= 15 & age <= 25 ///
+	& eastintv == 1 & eastbefore1990 == 1
+
+* (2) Lived in the GDR before 1990, moved to West Germany 
+replace socyearseast = 0 if agemovetowest < 15 & agemovetowest != .
+replace socyearseast = agemovetowest - 15 /// 
+	if agemovetowest >= 15 & agemovetowest <= 25
+replace socyearseast = 11 if agemovetowest > 25 & agemovetowest != .
+// tw line socyearseast agemovetowest, sort
+
+* (3) Lived in the West Germany before 1990, still living in West Germany
+replace socyearseast = 0 if eastintv == 0 & eastbefore1990 == 0
+
+* (4) Lived in the West Germany before 1990, moved to East Germany
+replace socyearseast = 11 if agemovetoeast < 15 & agemovetoeast != .
+replace socyearseast = 26 - agemovetoeast /// 
+	if agemovetoeast >= 15 & agemovetoeast <= 25
+replace socyearseast = 0 if agemovetoeast > 25 & agemovetoeast != .
+// tw line socyearseast agemovetoeast, sort
+
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Lived most formative years in East Germany | --> eastsoc
+gen eastsoc = (socyearseast / soctotyears) > 0.5 if socyearseast != .
 label variable eastsoc "Region of early socialization"
 label values eastsoc eastlb
+
+* Drop unnecessary variables 
+drop eastbefore1990 agemovetoeast agemovetowest soctotyears socyearseast
 
 * ______________________________________________________________________________
 * Periods, cohorts and generations
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Period variable
 gen period=essround
-recode period (1=2002) (2=2004) (3=2006) (4=2008) (5=2010) (6=2012) (7=2014) (8=2016)
-egen pickone_p=tag(period)
-
+recode period (1=2002) (2=2004) (3=2006) (4=2008) (5=2010) (6=2012) (7=2014) ///
+	(8=2016)
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Cohort variable
 local c_min=1910
-local c_max=1990
+local c_max=1985
 local c_d=5
 gen cohort=.
 forvalues c = `c_min'(`c_d')`c_max' {
 	replace cohort=`c' if yrbrn>=`c' & yrbrn<=(`c'+`c_d'-1)
 }
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Generations
-gen generation=1 if yrbrn<=1933
-replace generation=2 if yrbrn>=1934 & yrbrn<=1974
-replace generation=3 if yrbrn>=1975
+* Cohort-east variable
+egen cohorteast = group(cohort eastsoc), label
 
 * ______________________________________________________________________________
 * Socio-demographic and socio-economic variables
@@ -172,21 +214,28 @@ replace generation=3 if yrbrn>=1975
 * Gender | gndr --> female
 recode gndr (1=0) (2=1), gen(female) // male=0, female=1
 _crcslbl female gndr
-label define femalelb				///
-	0 "Male"						///
+label define femalelb ///
+	0 "Male" ///
 	1 "Female", modify
 label values female femalelb
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Age
-drop age // (!) (?)
-gen age=agea if agea<=100
-label variable age "Age of respondent"
+* Age --> Already defined; see previous section.
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Highest level of education | eisced --> edu
 gen edu = eisced
+replace edu = . if eisced > 7
 _crcslbl edu eisced
+label define edulb ///
+	1 "Less than lower secondary" ///
+	2 "Lower secondary" ///
+	3 "Lower tier upper secondary" ///
+	4 "Upper tier upper secondary" ///
+	5 "Advanced vocational, sub-degree" ///
+	6 "Lower tertiary education" ///
+	7 "Higher tertiary education", modify
+label values edu edulb
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Income | hinctnt, hinctnta --> incquart (income in quartiles)
@@ -208,10 +257,10 @@ forvalues i = 1(1)8 {
 }
 drop incquart_*
 label variable incquart "Income groups"
-label define incquartlb		///
-	1 "Q1"					///
-	2 "Q2"					///
-	3 "Q3"					///
+label define incquartlb ///
+	1 "Q1" ///
+	2 "Q2" ///
+	3 "Q3" ///
 	4 "Q4", modify
 label values incquart incquartlb
 
@@ -219,8 +268,8 @@ label values incquart incquartlb
 * Student | mnactic --> student (0:no, 1:yes)
 gen student=(mnactic==2) if (mnactic<.)
 label variable student "Student"
-label define studentlb	///
-	0 "Not student"		///
+label define studentlb ///
+	0 "Not student" ///
 	1 "Student", modify
 label values student studentlb
 
@@ -228,8 +277,8 @@ label values student studentlb
 * Unemployed | mnactic --> unemp (0:no, 1:yes)
 gen unemp=(mnactic==3 | mnactic==4) if (mnactic<.)
 label variable unemp "Unemployed"
-label define unemplb	///
-	0 "No"				///
+label define unemplb ///
+	0 "No" ///
 	1 "Yes", modify
 label values unemp unemplb
 
@@ -237,8 +286,8 @@ label values unemp unemplb
 * Member of trade union | mbtru --> union
 recode mbtru (3=0) (1 2=1), gen(union) // male=0, female=1
 _crcslbl union mbtru
-label define unionlb			///
-	0 "No"						///
+label define unionlb ///
+	0 "No" ///
 	1 "Yes, currently or previously", modify
 label values union unionlb
 
@@ -247,23 +296,47 @@ label values union unionlb
 gen city = domicil
 label variable city "Size of town/city"
 replace city = 5 + 1 - city // Inverses ordinal scale
-label define citylb							///
-	1 "Farm or home in countryside"			///
-	2 "Country village"						///
-	3 "Town or small city"					///
-	4 "Suburbs or outskirts of big city"	///
+label define citylb ///
+	1 "Farm or home in countryside" ///
+	2 "Country village" ///
+	3 "Town or small city" ///
+	4 "Suburbs or outskirts of big city" ///
 	5 "A big city", modify
 label values city citylb
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Born in Germany | brncntr --> native
-recode brncntr (2=0), gen(native)
-_crcslbl native brncntr
-label define noyeslb			///
-	0 "No"						///
-	1 "Yes", modify
-label values native noyeslb
+* Social class (Oesch 2006) | --> class8
 
+* Preserve dataset before splitting sample 
+tempfile master  // temporary dataset
+save "`master'"
+
+* ESS 1, 2, and 3
+keep if essround == 1 | essround == 2 | essround == 3
+do "${programs}Oesch_class_schema_ESS2002_2006_Stata.do"
+tempfile ess_1_3  // temporary dataset: ESS 1 to 3
+save "`ess_1_3'"
+
+* ESS 4 and 5
+use "`master'", clear
+keep if essround == 4 | essround == 5
+do "${programs}Oesch_class_schema_ESS2008_2010_ESS_Cumulative_Data_Wizard_Stata.do"
+tempfile ess_4_5  // temporary dataset: ESS 4 and 5
+save "`ess_4_5'"
+
+* ESS 6, 7, and 8
+use "`master'", clear
+keep if essround == 6 | essround == 7 | essround == 8
+do "${programs}Oesch_class_schema_ESS2012_Stata.do"
+tempfile ess_6_8  // temporary dataset: ESS 6 to 8
+save "`ess_6_8'"
+
+* Reassemble dataset
+append using "`ess_1_3'"
+append using "`ess_4_5'"
+
+* Drop unnecessary variables
+drop class16_r class8_r class5_r class16_p class8_p class5_p class16 class5
 
 * ______________________________________________________________________________
 * Political attitudes
