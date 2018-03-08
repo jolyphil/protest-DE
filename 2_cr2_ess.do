@@ -91,6 +91,7 @@ label values land landlb
 * East/West Germany: Region where interview was conducted
 
 recode intewde (2 = 0), gen(eastintv) // west=0, east=1
+_crcslbl eastintv intewde
 label define eastlb				///
 	0 "West Germany"			///
 	1 "East Germany", modify
@@ -220,7 +221,7 @@ label define femalelb ///
 label values female femalelb
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Age --> Already defined; see previous section.
+* Age --> age, Already defined; see previous section.
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Highest level of education | eisced --> edu
@@ -265,17 +266,8 @@ label define incquartlb ///
 label values incquart incquartlb
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Student | mnactic --> student (0:no, 1:yes)
-gen student=(mnactic==2) if (mnactic<.)
-label variable student "Student"
-label define studentlb ///
-	0 "Not student" ///
-	1 "Student", modify
-label values student studentlb
-
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Unemployed | mnactic --> unemp (0:no, 1:yes)
-gen unemp=(mnactic==3 | mnactic==4) if (mnactic<.)
+gen unemp = (mnactic==3 | mnactic==4) if (mnactic<.)
 label variable unemp "Unemployed"
 label define unemplb ///
 	0 "No" ///
@@ -338,138 +330,7 @@ append using "`ess_4_5'"
 * Drop unnecessary variables
 drop class16_r class8_r class5_r class16_p class8_p class5_p class16 class5
 
-* ______________________________________________________________________________
-* Political attitudes
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Political interest | polint --> polintr
-
-gen polint = polintr
-_crcslbl polint polintr
-replace polint = 4 + 1 - polint // Inverses ordinal scale
-label define polintlb				///
-	1 "Not at all interested"		///
-	2 "Hardly interested"			///
-	3 "Quite interested"			///
-	4 "Very interested", modify
-label values polint polintlb
-
-
-
-
-/*
-
-ctzcntr         double  %10.0g     ctzcntr    Citizen of country
-ctzship         str2    %2s                   Citizenship
-brncntr         double  %10.0g     brncntr    Born in country
-cntbrth         str2    %2s                   Country of birth
-
-trunn           double  %10.0g     trunn      Trade union, last 12 months: none apply
-trummb          double  %10.0g     trummb     Trade union, last 12 months: member
-truptp          double  %10.0g     truptp     Trade union, last 12 months: participated
-trudm           double  %10.0g     trudm      Trade union, last 12 months: donated money
-truvw           double  %10.0g     truvw      Trade union, last 12 months: voluntary work
-truref          double  %10.0g     truref     Trade union, last 12 months: refusal
-truna           double  %10.0g     truna      Trade union, last 12 months: no answer
-
-pdwrk           double  %10.0g     pdwrk      Doing last 7 days: paid work
-edctn           double  %10.0g     edctn      Doing last 7 days: education
-uempla          double  %10.0g     uempla     Doing last 7 days: unemployed, actively looking for job
-uempli          double  %10.0g     uempli     Doing last 7 days: unemployed, not actively looking for job
-dsbld           double  %10.0g     dsbld      Doing last 7 days: permanently sick or disabled
-rtrd            double  %10.0g     rtrd       Doing last 7 days: retired
-cmsrv           double  %10.0g     cmsrv      Doing last 7 days: community or military service
-hswrk           double  %10.0g     hswrk      Doing last 7 days: housework, looking after children, others
-dngoth          double  %10.0g     dngoth     Doing last 7 days: other
-dngdk           double  %10.0g     dngdk      Doing last 7 days: don't know
-dngref          double  %10.0g     dngref     Doing last 7 days: refusal
-dngna           double  %10.0g     dngna      Doing last 7 days: no answer
-mainact         double  %41.0g     mainact    Main activity last 7 days
-mnactic         double  %41.0g     mnactic    Main activity, last 7 days. All respondents. Post coded
-
-iscoco          double  %46.0g     iscoco     Occupation, ISCO88 (com)
-
-hinctnt         double  %10.0g     hinctnt    Household's total net income, all sources
-hincfel         double  %36.0g     hincfel    Feeling about household's income nowadays
-
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-* VALUES/ATTITUDES
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Trust
-gen trust = ppltrst
-_crcslbl trust ppltrst
-label values trust ppltrst
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Life satisfaction | stflife --> lifesatis
-gen lifesatis=stflife
-_crcslbl lifesatis stflife
-label values lifesatis stflife
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Confidence in Parliament | trstprl --> confparl
-gen confparl=trstprl
-_crcslbl confparl trstprl
-label values confparl trstprl
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Left-Right Scale | lrscale --> lrscale
-* OK
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Self-expression values | impfree --> selfexp
-gen selfexp = impfree
-_crcslbl selfexp impfree
-replace selfexp = 6 + 1 - selfexp // Inverses ordinal scale
-label define selfexplb				///
-	1 "Not like me at all"			///
-	2 "Not like me"					///
-	3 "A little like me"			///
-	4 "Somewhat like me"			///
-	5 "Like me"						///
-	6 "Very much like me", modify
-label values selfexp selfexplb
-
-/*
-* Satisfaction with democracy | stfdem --> demosatis
-gen demosatis = stfdem
-_crcslbl demosatis stfdem
-label values demosatis stfdem
-
-* Xenophobic attitude | imwbcnt --> xeno
-gen xeno = imwbcnt
-_crcslbl xeno imwbcnt
-replace xeno = 10 - xeno // Inverses ordinal scale
-label define xenolb				///
-	0 "Better place to live"		///
-	10 "Worse place to live", modify
-label values xeno xenolb
-*/
-
-* OTHER CONTROLS
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-*Gender | gndr --> female
-recode gndr (1=0) (2=1), gen(female) // male=0, female=1
-_crcslbl female gndr
-label define femalelb				///
-	0 "Male"						///
-	1 "Female", modify
-label values female femalelb
-
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-*Age
-drop age
-gen age=agea if agea<=100
-label variable age "Age of respondent"
-
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Attendance of religious services | rlgatnd --> relig
 gen relig = rlgatnd
 _crcslbl relig rlgatnd
@@ -484,19 +345,74 @@ label define religlb				///
 	6 "More than once a week", modify
 label values relig religlb
 
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Partner | partner --> partner
-replace partner=icpart1 if essround>=5  //harmonizes variables for ESSrounds 5-7
-recode partner (2=0)
-label define partnerlb				///
-	0 "Does not"					///
-	1 "Lives with husband/wife/partner at house", modify
-label values partner partnerlb
+* ______________________________________________________________________________
+* Political attitudes
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Political interest | polint --> polintr
+gen polint = polintr
+_crcslbl polint polintr
+replace polint = 4 + 1 - polint // Inverses ordinal scale
+label define polintlb				///
+	1 "Not at all interested"		///
+	2 "Hardly interested"			///
+	3 "Quite interested"			///
+	4 "Very interested", modify
+label values polint polintlb
+
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Trust in the legal system | trstlgl --> trustlegal
+gen trustlegal = trstlgl 
+_crcslbl trustlegal trstlgl
+label values trustlegal trstlgl
+
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Trust in the parliament | trstprl --> trustparl
+gen trustparl = trstprl
+_crcslbl trustparl trstprl
+label values trustparl trstprl
+
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Trust in the political parties | trstprt --> trustparties
+gen trustparties = trstprt
+_crcslbl trustparties trstprt
+replace trustparties = trstplde if essround == 1
+label values trustparties trstprt
+
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Most people can be trusted | ppltrst --> trustpeople
+gen trustpeople = ppltrst
+_crcslbl trustpeople ppltrst
+label values trustpeople ppltrst
+
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Satisfied with the way democracy works | stfdem --> stfdem
+* Ok! No recode.
+
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Satisfied with life as a whole | stflife --> stflife
+* Ok! No recode.
+
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Left-Right Scale | lrscale --> lrscale
+* Ok! No recode.
+
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Cultural life enriched by immigrants | imueclt --> promigrant
+gen promigrant = imueclt
+_crcslbl promigrant imueclt
+label values promigrant imueclt
 
 * ______________________________________________________________________________
 * Save and close
 
-keep petition-relig
+keep dweight ///
+	petition boycott demonstration ///
+	land eastintv eastsoc ///
+	period cohort cohorteast ///
+	age female edu incquart unemp union city class8 relig ///
+	polint trustlegal trustparl trustparties trustpeople ///
+	stfdem stflife lrscale promigrant
+
 save "${data}ess.dta", replace
 
 log close
