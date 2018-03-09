@@ -16,17 +16,21 @@ color grid         ltbluishgray
 color major_grid   ltbluishgray
 color minor_grid   ltbluishgray
 
+color dot_line       edkblue
+color dot_arealine   edkblue
+color dot_area       "218 231 253"
+
 color legend_line        none
 
-color p1     black
-color p2     gs10
-color p3     sky
-color p4     turquoise
-color p5     orangebrown
-color p6     reddish
-color p7     vermillon
-color p8     sea
-color p9     ananas
+color p      black
+color p1     gs10
+color p2     sky
+color p3     turquoise
+color p4     orangebrown
+color p5     reddish
+color p6     vermillon
+color p7     sea
+color p8     ananas
 
 gsize axis_title		medsmall
 gsize axis_title_gap	medium
