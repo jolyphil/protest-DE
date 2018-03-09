@@ -21,7 +21,10 @@ use "${data}ess-mi.dta", clear
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Taking part in a demonstration
 
-mi estimate, noisily: ///
+*mi estimate, noisily saving("${estfiles}miestfile1", replace): ///
+
+*drop b1 se1 ll ul
+
 meqrlogit demonstration i.female c.age##c.age i.edu3 i.incquart i.unemp ///
 	i.union i.city i.class5 i.land || _all: R.period || cohorteast:
 
@@ -33,5 +36,5 @@ gen ul = b1 + 1.96*se1
 
 twoway ///
 	(rarea ll ul cohort, sort fcolor(gs12) lcolor(gs12)) ///
-	(connected b1 cohort, sort mcolor(black) lcolor(black)),///
+	(connected b1 cohort, sort mcolor(black) lcolor(black)), ///
 	by(, note("")) by(, legend(off)) by(eastsoc)
