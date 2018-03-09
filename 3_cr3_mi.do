@@ -28,25 +28,23 @@ foreach var of varlist _all {
 * ______________________________________________________________________________
 * Perform imputation
 
-set matsize 10000
-
 mi set flong
 mi svyset [pweight=dweight]
 mi register imputed ///
-	petition boycott demonstration age female edu incquart /*student*/ unemp ///
-	union city relig polint trustlegal trustparl trustparties ///
-	trustpeople stfdem stflife lrscale promigrant
+	petition boycott demonstration ///
+	age female edu3 incquart unemp union city class5 ///
+	stfdem promigrant
 mi register regular ///
-	land eastintv eastsoc period cohort class8
+	land eastintv eastsoc period cohort
 mi register passive ///
 	cohorteast
 mi impute chained ///
 	(regress) age ///
-	(logit) petition boycott demonstration female unemp union ///
-	(ologit) edu incquart city relig polint trustlegal trustparl ///
-		trustparties trustpeople stfdem stflife lrscale promigrant ///
-		= i.land i.eastintv i.eastsoc##c.cohort##c.cohort i.period i.class8, ///
-		add(5) force dots noisily
+	(logit) petition boycott demonstration female unemp stfdem promigrant ///
+	(ologit) edu3 incquart city ///
+	(mlogit) class5 ///
+		= i.land i.eastintv i.eastsoc##c.cohort##c.cohort i.period, ///
+		add(5) force dots noisily rseed(12345)
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Summary table

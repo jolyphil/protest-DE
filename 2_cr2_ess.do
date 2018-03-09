@@ -223,12 +223,12 @@ label values female femalelb
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Age --> age, Already defined; see previous section.
 
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Highest level of education | eisced --> edu
-gen edu = eisced
-replace edu = . if eisced > 7
-_crcslbl edu eisced
-label define edulb ///
+/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Highest level of education (7 categories) | eisced --> edu7
+gen edu7 = eisced
+replace edu7 = . if eisced > 7
+_crcslbl edu7 eisced
+label define edu7lb ///
 	1 "Less than lower secondary" ///
 	2 "Lower secondary" ///
 	3 "Lower tier upper secondary" ///
@@ -236,7 +236,17 @@ label define edulb ///
 	5 "Advanced vocational, sub-degree" ///
 	6 "Lower tertiary education" ///
 	7 "Higher tertiary education", modify
-label values edu edulb
+label values edu7 edu7lb */
+
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Highest level of education (3 categories) | eisced --> edu3
+recode eisced (1/2 = 1) (3/5 = 2) (6/7 = 3) (else = .), gen(edu3)
+label variable edu3 "Highest level of education"
+label define edu3lb ///
+	1 "Lower" ///
+	2 "Middle" ///
+	3 "Upper", modify
+label values edu3 edu3lb
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Income | hinctnt, hinctnta --> incquart (income in quartiles)
@@ -297,7 +307,7 @@ label define citylb ///
 label values city citylb
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Social class (Oesch 2006) | --> class8
+* Social class (Oesch 2006) | --> class5
 
 * Preserve dataset before splitting sample 
 tempfile master  // temporary dataset
@@ -328,9 +338,9 @@ append using "`ess_1_3'"
 append using "`ess_4_5'"
 
 * Drop unnecessary variables
-drop class16_r class8_r class5_r class16_p class8_p class5_p class16 class5
+drop class16_r class8_r class5_r class16_p class8_p class5_p class16 class8
 
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Attendance of religious services | rlgatnd --> relig
 gen relig = rlgatnd
 _crcslbl relig rlgatnd
@@ -343,7 +353,7 @@ label define religlb				///
 	4 "Once a month"				///
 	5 "Once a week"					///
 	6 "More than once a week", modify
-label values relig religlb
+label values relig religlb */
 
 * ______________________________________________________________________________
 * Political attitudes
@@ -359,7 +369,7 @@ label define polintlb				///
 	4 "Very interested", modify
 label values polint polintlb
 
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Trust in the legal system | trstlgl --> trustlegal
 gen trustlegal = trstlgl 
 _crcslbl trustlegal trstlgl
@@ -376,7 +386,7 @@ label values trustparl trstprl
 gen trustparties = trstprt
 _crcslbl trustparties trstprt
 replace trustparties = trstplde if essround == 1
-label values trustparties trstprt
+label values trustparties trstprt */
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Most people can be trusted | ppltrst --> trustpeople
@@ -409,9 +419,8 @@ keep dweight ///
 	petition boycott demonstration ///
 	land eastintv eastsoc ///
 	period cohort cohorteast ///
-	age female edu incquart unemp union city class8 relig ///
-	polint trustlegal trustparl trustparties trustpeople ///
-	stfdem stflife lrscale promigrant
+	age female edu3 incquart unemp union city class5 ///
+	stfdem promigrant
 
 save "${data}ess.dta", replace
 
