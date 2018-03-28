@@ -14,7 +14,7 @@ set more off
 * ______________________________________________________________________________
 * Load ESS MI dataset
 
-use "${data}ess-mi.dta", clear
+use "${data}ess.dta", clear
 
 * ______________________________________________________________________________
 * Cross-classified random effect models
@@ -25,8 +25,23 @@ use "${data}ess-mi.dta", clear
 
 *drop b1 se1 ll ul
 
-meqrlogit demonstration i.female c.age##c.age i.edu3 i.incquart i.unemp ///
+meqrlogit demonstration i.female c.age##c.age i.edu3 /*i.incquart*/ i.unemp ///
 	i.union i.city i.class5 i.land || _all: R.period || cohorteast:
+
+predict b*, reffects relevel(cohorteast)
+predict se*,  reses relevel(cohorteast)
+
+gen ll = b1 - 1.96*se1
+gen ul = b1 + 1.96*se1
+
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+twoway ///
+	(rarea ll ul cohort, sort fcolor(gs12) lcolor(gs12)) ///
+	(connected b1 cohort, sort mcolor(black) lcolor(black)), ///
+	by(, note("")) by(, legend(off)) by(eastsoc)
+	
+meqrlogit demonstration i.female c.age##c.age i.edu3 i.incquart i.unemp ///
+	i.union i.city i.class5 i.land promigrant || _all: R.period || cohorteast: promigrant
 
 predict b*, reffects relevel(cohorteast)
 predict se*,  reses relevel(cohorteast)
@@ -37,4 +52,5 @@ gen ul = b1 + 1.96*se1
 twoway ///
 	(rarea ll ul cohort, sort fcolor(gs12) lcolor(gs12)) ///
 	(connected b1 cohort, sort mcolor(black) lcolor(black)), ///
+	xline(1934,lcolor(black) lpattern(dash)) xline(1975,lcolor(black) lpattern(dash)) ///
 	by(, note("")) by(, legend(off)) by(eastsoc)
