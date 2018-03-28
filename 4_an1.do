@@ -25,7 +25,7 @@ use "${data}ess.dta", clear
 
 *drop b1 se1 ll ul
 
-meqrlogit demonstration i.female c.age##c.age i.edu3 /*i.incquart*/ i.unemp ///
+meqrlogit petition i.female c.age##c.age i.edu3 /*i.incquart*/ i.unemp ///
 	i.union i.city i.class5 i.land || _all: R.period || cohorteast:
 
 predict b*, reffects relevel(cohorteast)
@@ -33,6 +33,12 @@ predict se*,  reses relevel(cohorteast)
 
 gen ll = b1 - 1.96*se1
 gen ul = b1 + 1.96*se1
+
+twoway ///
+	(rarea ll ul cohort, sort fcolor(gs12) lcolor(gs12)) ///
+	(connected b1 cohort, sort mcolor(black) lcolor(black)), ///
+	xline(1934,lcolor(black) lpattern(dash)) xline(1975,lcolor(black) lpattern(dash)) ///
+	by(, note("")) by(, legend(off)) by(eastsoc)
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 twoway ///
