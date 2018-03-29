@@ -18,45 +18,51 @@ use "${data}ess.dta", clear
 
 * ______________________________________________________________________________
 * Cross-classified random effect models
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Taking part in a demonstration
 
-*mi estimate, noisily saving("${estfiles}miestfile1", replace): ///
+local controls "female c.age##c.age i.edu3 unemp union i.city i.class5 i.land"
+local fe_eq "eastsoc `controls'"
 
-*drop b1 se1 ll ul
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Random slope at cohort level
+local level_1 "cohort"
+local re_eq_1 "|| _all: R.period || cohort: eastsoc"
+local lines_1 "xline(1929,lcolor(black) lpattern(dash)) xline(1970,lcolor(black) lpattern(dash))"
 
-meqrlogit petition i.female c.age##c.age i.edu3 /*i.incquart*/ i.unemp ///
-	i.union i.city i.class5 i.land || _all: R.period || cohorteast:
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Random slope at period level
+local level_2 "period"
+local re_eq_2 "|| _all: R.cohort || period: eastsoc"
+local lines_2 ""
 
-predict b*, reffects relevel(cohorteast)
-predict se*,  reses relevel(cohorteast)
-
-gen ll = b1 - 1.96*se1
-gen ul = b1 + 1.96*se1
-
-twoway ///
-	(rarea ll ul cohort, sort fcolor(gs12) lcolor(gs12)) ///
-	(connected b1 cohort, sort mcolor(black) lcolor(black)), ///
-	xline(1934,lcolor(black) lpattern(dash)) xline(1975,lcolor(black) lpattern(dash)) ///
-	by(, note("")) by(, legend(off)) by(eastsoc)
-
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-twoway ///
-	(rarea ll ul cohort, sort fcolor(gs12) lcolor(gs12)) ///
-	(connected b1 cohort, sort mcolor(black) lcolor(black)), ///
-	by(, note("")) by(, legend(off)) by(eastsoc)
+foreach dv of varlist demonstration petition boycott {
+	forvalues i=1/2 {
 	
-meqrlogit demonstration i.female c.age##c.age i.edu3 i.incquart i.unemp ///
-	i.union i.city i.class5 i.land promigrant || _all: R.period || cohorteast: promigrant
-
-predict b*, reffects relevel(cohorteast)
-predict se*,  reses relevel(cohorteast)
-
-gen ll = b1 - 1.96*se1
-gen ul = b1 + 1.96*se1
-
-twoway ///
-	(rarea ll ul cohort, sort fcolor(gs12) lcolor(gs12)) ///
-	(connected b1 cohort, sort mcolor(black) lcolor(black)), ///
-	xline(1934,lcolor(black) lpattern(dash)) xline(1975,lcolor(black) lpattern(dash)) ///
-	by(, note("")) by(, legend(off)) by(eastsoc)
+		capture drop b1 b2 se1 se2 slope ll ul
+		
+		* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+		* Model
+		meqrlogit `dv' `fe_eq' `re_eq_`i''
+		est store m_`dv'_`i'
+		
+		* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+		* Postestimation (EB prediction)
+		predict b*, reffects relevel(`level_`i'')
+		predict se*, reses relevel(`level_`i'')
+		
+		gen slope = _b[eq1:eastsoc] + b1
+		gen ll = _b[eq1:eastsoc] + b1 - 1.96*se1
+		gen ul = _b[eq1:eastsoc] + b1 + 1.96*se1
+		
+		* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+		* Graph
+		twoway ///
+			(rarea ll ul `level_`i'', sort fcolor(gs12) lcolor(gs12)) ///
+			(connected slope `level_`i'', sort mcolor(black) lcolor(black)), ///
+			`lines_`i'' ///
+			legend(off) ///
+			saving("${figures_gph}`dv'-`level_`i''.gph", replace)
+		graph export "${figures_png}`dv'-`level_`i''.png", replace
+		
+	} 
+}
+*

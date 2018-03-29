@@ -386,14 +386,14 @@ label values trustparl trstprl
 gen trustparties = trstprt
 _crcslbl trustparties trstprt
 replace trustparties = trstplde if essround == 1
-label values trustparties trstprt */
+label values trustparties trstprt 
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Most people can be trusted | ppltrst --> trustpeople
 gen trustpeople = ppltrst
 _crcslbl trustpeople ppltrst
 label values trustpeople ppltrst
-
+*/
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Satisfied with the way democracy works | stfdem --> stfdem
 * Ok! No recode.
