@@ -65,4 +65,5 @@ foreach dv of varlist demonstration petition boycott {
 		
 	} 
 }
-*
+* margins land, predict(mu fixed)
+* marginsplot, recast(scatter)

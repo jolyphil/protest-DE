@@ -6,3 +6,12 @@
 
 # estimate files
 *.ster
+
+# database files
+*.db
+
+# figures png
+*.png
+
+# figures gph
+*.gph
