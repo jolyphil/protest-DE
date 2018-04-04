@@ -6,7 +6,7 @@
 * Author:	Philippe Joly, Humboldt-Universität zu Berlin
 ********************************************************************************
 
-version 14
+*version 14
 capture log close
 capture log using "${logfiles}4_an1.smcl", replace
 set more off
