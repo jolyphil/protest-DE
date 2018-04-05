@@ -11,6 +11,8 @@ capture log close
 capture log using "${logfiles}4_an1.smcl", replace
 set more off
 
+ssc install estout
+
 * ______________________________________________________________________________
 * Load ESS MI dataset
 
