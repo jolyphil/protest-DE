@@ -1,40 +1,67 @@
-local M1 `1'
-local M2 `2'
-local M3 `3'
-local exposure "`4'"
+********************************************************************************
+* Project:	Protest in East and West Germany
+* File: 	export_tab_APC_models.do
+* Task:		Export 2-column regression table in LaTeX
+* Version:	06.04.2018
+* Author:	Philippe Joly, Humboldt-Universität zu Berlin
+********************************************************************************
+
+local M1 `1' // assumed to be random slope at cohort-level
+local M2 `2' // assumed to be random slope at period-level
 local saveas "${tables_tex}`5'.tex"
 
-local models "`1' `2' `3'"
+est restore `M1'
+mat M_clust = e(N_g)
+estadd scalar N_cohort = M_clust[1,2], replace : `M1'
+estadd scalar N_cohort = M_clust[1,2], replace : `M2'
 
-if "`exposure'" == "indrepress1"{
-	local exposurelbl "Exposure (15-25 years old)"
-}
-if "`exposure'" == "indrepress2"{
-	local exposurelbl "Exposure (7-17 years old)"
-}
+est restore `M2'
+mat M_clust = e(N_g)
+estadd scalar N_period = M_clust[1,2], replace : `M1'
+estadd scalar N_period = M_clust[1,2], replace : `M2'
 
-forvalues i = 1/3 {
-	est restore `M`i''
-	mat M_clust = e(N_g)
-	estadd scalar N_c = M_clust[1,1], replace : `M`i''
-	estadd scalar N_cw = M_clust[1,2], replace : `M`i''
-}
+
+/*
+local vspacing "\hspace{0.4cm}"
+local hspacing " & & & & \\ "
+local subtitle1 "\textit{Individual Resources} & & & & \\ "
+local subtitle2 "`hspacing'\textit{Individual attitudes} & & & & \\ "
+local subtitle3 "`hspacing'\textit{Other controls} & & & & \\ "
+local subtitle4 "`hspacing'\textit{Early exposure to repression} & & & & \\ "
+local subtitle5 "`hspacing'\textit{Macro-level predictors} & & & & \\ "
+local subtitle6 "`hspacing'\textit{Growth rates} & & & & \\ "
+*local notdisp "EVS dummy &\multicolumn{1}{c}{yes} & &\multicolumn{1}{c}{yes} & &\multicolumn{1}{c}{yes} & \\ "
+*/
+
 #delimit ;
 
-local vspacing "\hspace{0.4cm}";
-local hspacing " & & & & & & \\ ";
-local subtitle1 "\textit{Individual Resources} & & & & & & \\ ";
-local subtitle2 "`hspacing'\textit{Individual attitudes} & & & & & & \\ ";
-local subtitle3 "`hspacing'\textit{Other controls} & & & & & & \\ ";
-local subtitle4 "`hspacing'\textit{Early exposure to repression} & & & & & & \\ ";
-local subtitle5 "`hspacing'\textit{Macro-level predictors} & & & & & & \\ ";
-local subtitle6 "`hspacing'\textit{Growth rates} & & & & & & \\ ";
-*local notdisp "EVS dummy &\multicolumn{1}{c}{yes} & &\multicolumn{1}{c}{yes} & &\multicolumn{1}{c}{yes} & \\ ";
+esttab `M1' `M2', 
+b(4) se(4) noomit nobase nonum star(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
+	mtitles("Model 1" "Model 2")
+	transform(var_*: exp(2*@) 2*exp(2*@))
+	stats(N_cohort N_period N, 
+		fmt(0 0 0) 
+		labels(
+			`"N (cohorts)"'
+			`"N (periods)"'
+			`"N (individuals)"'))
+;
 
-/*______________________________________________________________________________
-* Individual- and Macro-level predictors */
+* ______________________________________________________________________________
+* Table for 2 cross-classified models
 
-esttab `models' using `saveas',
+/*b(4) se(4) noomit nobase nonum star(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
+	mtitles("Model 1" "Model 2")
+	transform(var_*: exp(2*@) 2*exp(2*@))
+	stats(N_cohort N_period N, 
+		fmt(0 0 0) 
+		labels(
+			`"N (cohorts)"'
+			`"N (periods)"'
+			`"N (individuals)"')
+*/
+
+/*esttab `models' using `saveas',
 	replace b(4) se(4) noomit nobase wide booktabs fragment nonum
 	star(+ 0.10 * 0.05 ** 0.01 *** 0.001) alignment(S S) compress
 	mtitles("Model 2" "Model 3" "Model 4") 
@@ -118,7 +145,7 @@ esttab `models' using `saveas',
 		)
 	transform(var_*: exp(2*@) 2*exp(2*@))
 	eqlabels("" "\midrule Variance (countries: time)" "Variance (countries: cons.)" "Variance (country-waves)" "Variance (residuals)", none)
-	stats(N_c N_cw N, 
+	stats(N_cohort N_period N, 
 		fmt(0 0 0) 
 		layout(
 			"\multicolumn{1}{c}{@}"
@@ -131,4 +158,5 @@ esttab `models' using `saveas',
 			`"N (individuals)"'
 		))
 	;
+*/
 #delimit cr

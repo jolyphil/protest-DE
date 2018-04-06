@@ -12,6 +12,7 @@ capture log using "${logfiles}4_an1.smcl", replace
 set more off
 
 ssc install estout
+ssc install coefplot
 
 * ______________________________________________________________________________
 * Load ESS MI dataset
@@ -21,8 +22,8 @@ use "${data}ess.dta", clear
 * ______________________________________________________________________________
 * Cross-classified random effect models
 
-local controls "female c.age##c.age i.edu3 unemp union i.city i.class5 i.land"
-local fe_eq "eastsoc `controls'"
+local controls "i.female c.age##c.age i.edu3 i.unemp i.union i.city i.class5 i.land"
+local fe_eq "i.eastsoc `controls'"
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Random slope at cohort level
@@ -36,7 +37,7 @@ local level_2 "period"
 local re_eq_2 "|| _all: R.cohort || period: eastsoc"
 local lines_2 ""
 
-foreach dv of varlist demonstration petition boycott {
+foreach dv of varlist petition {
 	forvalues i=1/2 {
 	
 		capture drop b1 b2 se1 se2 slope ll ul
@@ -51,9 +52,9 @@ foreach dv of varlist demonstration petition boycott {
 		predict b*, reffects relevel(`level_`i'')
 		predict se*, reses relevel(`level_`i'')
 		
-		gen slope = _b[eq1:eastsoc] + b1
-		gen ll = _b[eq1:eastsoc] + b1 - 1.96*se1
-		gen ul = _b[eq1:eastsoc] + b1 + 1.96*se1
+		gen slope = _b[eq1:1.eastsoc] + b1
+		gen ll = _b[eq1:1.eastsoc] + b1 - 1.96*se1
+		gen ul = _b[eq1:1.eastsoc] + b1 + 1.96*se1
 		
 		* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 		* Graph

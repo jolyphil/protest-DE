@@ -19,7 +19,7 @@ global path "M:/user/joly/Analyses/protest-DE/"
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Folders
 
-global data "${data}data/"
+global data "${path}data/"
 	global data_raw "${data}raw/"
 global estfiles "${path}estfiles/"
 global figures "${path}figures/"
