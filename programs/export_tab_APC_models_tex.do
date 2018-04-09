@@ -13,7 +13,8 @@ local M1 `1' // Assume all models have the same types of clusters
 local M2 `2'
 local M3 `3'
 
-local saveas "${tables_tex}`4'.tex"
+local saveas_a "${tables_tex}`4'_a.tex"
+local saveas_b "${tables_tex}`4'_b.tex"
 
 * ______________________________________________________________________________
 * Hierarchical structure
@@ -65,8 +66,10 @@ forval i = 1/3 {
 * ______________________________________________________________________________
 * Spaces and subtitles
 
-local vspacing "---"
-local hspacing ""
+local vspacing "\hspace{0.4cm}"
+local hspacing " & & & &  & & \\ "
+local subtitle1 "\textit{Individual-level variables} & & & & & & \\ "
+local subtitle2 "\textit{State fixed effects} & & & & & & \\ "
 /*
 local subtitle1 "\textit{Individual Resources} & & & & \\ "
 local subtitle2 "`hspacing'\textit{Individual attitudes} & & & & \\ "
@@ -82,56 +85,68 @@ local subtitle6 "`hspacing'\textit{Growth rates} & & & & \\ "
 
 #delimit ;
 
-esttab `M1' `M2' `M3', 
-b(4) se(4) nobase nonotes noobs noomit star(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
+esttab `M1' `M2' `M3' using `saveas_a', replace 
+	b(4) se(4) noomit nobase noobs wide booktabs fragment nonum
+	star(+ 0.10 * 0.05 ** 0.01 *** 0.001) alignment(S S) compress
 	mtitles("Demonstration" "Petition" "Boycott")
+	collabels("\multicolumn{1}{c}{Coef.}" "\multicolumn{1}{c}{SE}")
 	drop(*.land _cons)
 	refcat( 
 		2.edu3 "Education, Low (ref.)"
-		2.class5 "Class, Higher-grade service class (ref.)" 
-		, nolabel) 
+		2.city "Town size, Home in countryside (ref.)"
+		2.class5 "Social class, High service class (ref.)" 
+		, nolabel
+		) 
 	coeflabel(
-		1.eastsoc "East German"
-		1.female "Gender (women)" 
+		1.eastsoc "`subtitle1'`hspacing'East German"
+		1.female "Women" 
 		age "Age"
-		c.age#c.age "Age2"	
+		c.age#c.age "Age\textsuperscript{2}"	
 		2.edu3 "`vspacing'Middle"
 		3.edu3 "`vspacing'High"
 		1.unemp "Unemployed" 
 		1.union "Union member" 
 		2.city "`vspacing'Country village"
 		3.city "`vspacing'Town or small city"
-		4.city "`vspacing'Suburbs or outskirts of big city"
+		4.city "`vspacing'Outskirts of big city"
 		5.city "`vspacing'A big city"
-		2.class5 "`vspacing'Lower-grade service class"
+		2.class5 "`vspacing'Low service class"
 		3.class5 "`vspacing'Small business owners"
 		4.class5 "`vspacing'Skilled workers"
 		5.class5 "`vspacing'Unskilled workers"
-		
-		_cons "`hspacing'Constant"
 		)
+	eqlabels("" "" "" "", none)
 ;
 
-esttab `M1' `M2' `M3', 
-b(4) se(4) nobase nonotes noobs noomit star(+ 0.10 * 0.05 ** 0.01 *** 0.001)
-label 
-mtitles("Demonstration" "Petition" "Boycott")
-keep(*.land _cons)
+esttab `M1' `M2' `M3' using `saveas_b', replace 
+	b(4) se(4) noomit nobase noobs wide booktabs fragment nonum
+	star(+ 0.10 * 0.05 ** 0.01 *** 0.001) alignment(S S) compress
+	mtitles("Demonstration" "Petition" "Boycott")
+	collabels("\multicolumn{1}{c}{Coef.}" "\multicolumn{1}{c}{SE}")
+	label
+	keep(*.land *_cons)
 	refcat( 
-		2.land "Baden-Wuerttemberg (ref.)"
+		2.land "`subtitle2'`hspacing'Baden-Wuerttemberg (ref.)"
 		, nolabel) 
 	coeflabel(		
 		_cons "`hspacing'Intercept"
 		)
 	transform(ln*: exp(2*@) 2*exp(2*@))
-	eqlabels("" "Variance (`L3': intercept)" "Variance (`L2': slope)" "Variance (`L2': intercept)", none)
+	eqlabels("" "\midrule Variance (`L3': intercept)" "Variance (`L2': slope)" "Variance (`L2': intercept)", none)
 	stats(bic N_L3 N_L2 N, 
-		fmt(1 0 0 0) 
+		fmt(1 0 0 0)
+		layout(
+			"\multicolumn{1}{c}{@}"
+			"\multicolumn{1}{c}{@}"
+			"\multicolumn{1}{c}{@}"
+			"\multicolumn{1}{c}{@}"
+			)
 		labels(
 			`"BIC"'
 			`"N (`L3's)"'
 			`"N (`L2's)"'
-			`"N (individuals)"')
+			`"N (individuals)"'
+			)
 		)
 ;
 

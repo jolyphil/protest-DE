@@ -16,5 +16,8 @@
 # figures gph
 *.gph
 
+# tables tex
+*.tex
+
 # data folder
 data/
