@@ -6,24 +6,68 @@
 * Author:	Philippe Joly, Humboldt-Universität zu Berlin
 ********************************************************************************
 
-local M1 `1' // assumed to be random slope at cohort-level
-local M2 `2' // assumed to be random slope at period-level
-local saveas "${tables_tex}`5'.tex"
+* ______________________________________________________________________________
+* Input arguments
+
+local M1 `1' // Assume all models have the same types of clusters
+local M2 `2'
+local M3 `3'
+
+local saveas "${tables_tex}`4'.tex"
+
+* ______________________________________________________________________________
+* Hierarchical structure
 
 est restore `M1'
-mat M_clust = e(N_g)
-estadd scalar N_cohort = M_clust[1,2], replace : `M1'
-estadd scalar N_cohort = M_clust[1,2], replace : `M2'
 
-est restore `M2'
-mat M_clust = e(N_g)
-estadd scalar N_period = M_clust[1,2], replace : `M1'
-estadd scalar N_period = M_clust[1,2], replace : `M2'
+local posspace = strpos(e(ivars), " ") 
+	// find position space in stored result e(ivars), e.g. "_all cohort"
+local L2 = substr(e(ivars),`posspace' + 1,.)
+	// extract grouping variables, e.g "cohort"
+if "`L2'" == "cohort" {
+	local L3 "period"
+} 
+else {
+	local L3 "cohort"
+}
+	disp "Note: `L2' nested within `L3'."
 
+tempvar tag_L3
+tempvar sum_L3_clusters
 
+egen `tag_L3' = tag(`L3') if e(sample)==1
+egen `sum_L3_clusters' = sum(`tag_L3')
+summ `sum_L3_clusters'
+disp r(max)
+	
+* ______________________________________________________________________________
+* Extract number of clusters
+
+forval i = 1/3 {
+	est restore `M`i''
+	
+	* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+	* Number of clusters at L2
+	mat M_clust = e(N_g)
+	estadd scalar N_L2 = M_clust[1,2], replace : `M`i''
+	
+	* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+	* Number of clusters at L3
+	tempvar tag_L3
+	tempvar sum_L3_clusters
+
+	egen `tag_L3' = tag(`L3') if e(sample)==1
+	egen `sum_L3_clusters' = sum(`tag_L3')
+	summ `sum_L3_clusters'
+	estadd scalar N_L3 = r(max), replace : `M`i''
+}
+
+* ______________________________________________________________________________
+* Spaces and subtitles
+
+local vspacing "---"
+local hspacing ""
 /*
-local vspacing "\hspace{0.4cm}"
-local hspacing " & & & & \\ "
 local subtitle1 "\textit{Individual Resources} & & & & \\ "
 local subtitle2 "`hspacing'\textit{Individual attitudes} & & & & \\ "
 local subtitle3 "`hspacing'\textit{Other controls} & & & & \\ "
@@ -33,18 +77,62 @@ local subtitle6 "`hspacing'\textit{Growth rates} & & & & \\ "
 *local notdisp "EVS dummy &\multicolumn{1}{c}{yes} & &\multicolumn{1}{c}{yes} & &\multicolumn{1}{c}{yes} & \\ "
 */
 
+* ______________________________________________________________________________
+* Table
+
 #delimit ;
 
-esttab `M1' `M2', 
-b(4) se(4) noomit nobase nonum star(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
-	mtitles("Model 1" "Model 2")
-	transform(var_*: exp(2*@) 2*exp(2*@))
-	stats(N_cohort N_period N, 
-		fmt(0 0 0) 
+esttab `M1' `M2' `M3', 
+b(4) se(4) nobase nonotes noobs noomit star(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
+	mtitles("Demonstration" "Petition" "Boycott")
+	drop(*.land _cons)
+	refcat( 
+		2.edu3 "Education, Low (ref.)"
+		2.class5 "Class, Higher-grade service class (ref.)" 
+		, nolabel) 
+	coeflabel(
+		1.eastsoc "East German"
+		1.female "Gender (women)" 
+		age "Age"
+		c.age#c.age "Age2"	
+		2.edu3 "`vspacing'Middle"
+		3.edu3 "`vspacing'High"
+		1.unemp "Unemployed" 
+		1.union "Union member" 
+		2.city "`vspacing'Country village"
+		3.city "`vspacing'Town or small city"
+		4.city "`vspacing'Suburbs or outskirts of big city"
+		5.city "`vspacing'A big city"
+		2.class5 "`vspacing'Lower-grade service class"
+		3.class5 "`vspacing'Small business owners"
+		4.class5 "`vspacing'Skilled workers"
+		5.class5 "`vspacing'Unskilled workers"
+		
+		_cons "`hspacing'Constant"
+		)
+;
+
+esttab `M1' `M2' `M3', 
+b(4) se(4) nobase nonotes noobs noomit star(+ 0.10 * 0.05 ** 0.01 *** 0.001)
+label 
+mtitles("Demonstration" "Petition" "Boycott")
+keep(*.land _cons)
+	refcat( 
+		2.land "Baden-Wuerttemberg (ref.)"
+		, nolabel) 
+	coeflabel(		
+		_cons "`hspacing'Intercept"
+		)
+	transform(ln*: exp(2*@) 2*exp(2*@))
+	eqlabels("" "Variance (`L3': intercept)" "Variance (`L2': slope)" "Variance (`L2': intercept)", none)
+	stats(bic N_L3 N_L2 N, 
+		fmt(1 0 0 0) 
 		labels(
-			`"N (cohorts)"'
-			`"N (periods)"'
-			`"N (individuals)"'))
+			`"BIC"'
+			`"N (`L3's)"'
+			`"N (`L2's)"'
+			`"N (individuals)"')
+		)
 ;
 
 * ______________________________________________________________________________

@@ -70,3 +70,9 @@ foreach dv of varlist petition {
 }
 * margins land, predict(mu fixed)
 * marginsplot, recast(scatter)
+
+* ______________________________________________________________________________
+* Close
+
+log close
+exit
