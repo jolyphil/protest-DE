@@ -63,8 +63,8 @@ foreach dv of varlist demonstration petition boycott {
 			(connected slope `level_`i'', sort mcolor(black) lcolor(black)), ///
 			`lines_`i'' ///
 			legend(off) ///
-			saving("${figures_gph}`dv'-`level_`i''.gph", replace)
-		graph export "${figures_png}`dv'-`level_`i''.png", replace
+			saving("${figures_gph}fig_`dv'-`level_`i''.gph", replace)
+		graph export "${figures_pdf}fig_`dv'-`level_`i''.pdf", replace
 		
 	} 
 }
