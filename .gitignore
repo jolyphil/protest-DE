@@ -10,8 +10,8 @@
 # database files
 *.db
 
-# figures png
-*.png
+# figures pdf
+*.pdf
 
 # figures gph
 *.gph

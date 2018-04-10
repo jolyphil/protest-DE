@@ -37,7 +37,7 @@ local level_2 "period"
 local re_eq_2 "|| _all: R.cohort || period: eastsoc"
 local lines_2 ""
 
-foreach dv of varlist petition {
+foreach dv of varlist demonstration petition boycott {
 	forvalues i=1/2 {
 	
 		capture drop b1 b2 se1 se2 slope ll ul
@@ -68,9 +68,29 @@ foreach dv of varlist petition {
 		
 	} 
 }
-* margins land, predict(mu fixed)
-* marginsplot, recast(scatter)
+* ______________________________________________________________________________
+* Export Tables
 
+do "${programs}export_tab_APC_models_tex.do" ///
+	m_demonstration_1 /// Model 1
+	m_petition_1 /// Model 2
+	m_boycott_1 /// Model 3
+	tab_APC_rs_cohort // filename
+
+do "${programs}export_tab_APC_models_tex.do" ///
+	m_demonstration_2 ///
+	m_petition_2 ///
+	m_boycott_2 ///
+	tab_APC_rs_period // filename
+* ______________________________________________________________________________
+* Export Graph
+
+do "${programs}export_coefplot.do" ///
+	m_demonstration_1 "Demonstration" ///
+	m_petition_1 "Petition" ///
+	m_boycott_1 "Boycott" ///
+	"fig_coefplot" // filename
+	
 * ______________________________________________________________________________
 * Close
 
