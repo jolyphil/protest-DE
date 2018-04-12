@@ -85,8 +85,8 @@ esttab `M1' `M2' `M3' using `saveas_a', replace
 	coeflabel(
 		1.eastsoc "`subtitle1'East German"
 		1.female "Woman" 
-		age "Age"
-		c.age#c.age "Age\textsuperscript{2}"	
+		age10 "Age (10 years)"
+		c.age10#c.age10 "Age\textsuperscript{2}"	
 		2.edu3 "`vspacing'Middle"
 		3.edu3 "`vspacing'High"
 		1.unemp "Unemployed" 

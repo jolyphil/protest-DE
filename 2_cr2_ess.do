@@ -122,8 +122,11 @@ replace eastintv = . if eastintv == 1 ///
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Current Age | agea --> age
 drop age
-gen age = agea/10 if agea <= 100
-label variable age "Age of respondent(10 years)"
+gen age = agea if agea <= 100
+label variable age "Age of respondent"
+
+gen age10 = agea/10 if agea <= 100
+label variable age10 "Age of respondent (10 years)"
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Lived in East Germany before 1990 | splow2de, n3 --> eastbefore1990
@@ -419,7 +422,7 @@ keep dweight ///
 	petition boycott demonstration ///
 	land eastintv eastsoc ///
 	period cohort cohorteast ///
-	age female edu3 incquart unemp union city class5 ///
+	age age10 female edu3 incquart unemp union city class5 ///
 	stfdem promigrant
 
 save "${data}ess.dta", replace

@@ -30,8 +30,8 @@ coefplot
 		. 
 		1.female 
 		. 
-		age
-		c.age#c.age
+		age10
+		c.age10#c.age10
 		.
 		"*.edu3"
 		.
@@ -51,8 +51,8 @@ coefplot
 	coeflabels(
 		1.eastsoc = "`subtitle1'East German"
 		1.female = "Woman" 
-		age = "Age"
-		c.age#c.age = "Age{superscript:2}"	
+		age10 = "Age (10 years)"
+		c.age10#c.age10 = "Age{superscript:2}"	
 		2.edu3 = "Middle"
 		3.edu3 = "High"
 		1.unemp = "Unemployed" 

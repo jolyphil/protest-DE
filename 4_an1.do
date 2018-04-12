@@ -21,7 +21,7 @@ use "${data}ess.dta", clear
 * ______________________________________________________________________________
 * Cross-classified random effect models
 
-local controls "i.female c.age##c.age i.edu3 i.unemp i.union i.city i.class5 i.land"
+local controls "i.female c.age10##c.age10 i.edu3 i.unemp i.union i.city i.class5 i.land"
 local fe_eq "i.eastsoc `controls'"
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
