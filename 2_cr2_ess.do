@@ -122,8 +122,8 @@ replace eastintv = . if eastintv == 1 ///
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Current Age | agea --> age
 drop age
-gen age = agea if agea <= 100
-label variable age "Age of respondent"
+gen age = agea/10 if agea <= 100
+label variable age "Age of respondent(10 years)"
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Lived in East Germany before 1990 | splow2de, n3 --> eastbefore1990

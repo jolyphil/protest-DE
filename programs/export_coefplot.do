@@ -22,8 +22,8 @@ local saveas "`7'"
 #delimit ;
 coefplot
 	(`M1', label(`M1_label'))
-	(`M2', label(`M2_label'))
-	(`M3', label(`M3_label')),
+	(`M2', label(`M2_label') msymbol(triangle))
+	(`M3', label(`M3_label') msymbol(square)),
 	drop(*.land _cons) /*eform*/ xline(0) xtitle("LogitPr(Protest = 1)", size(small))
 	order(
 		1.eastsoc

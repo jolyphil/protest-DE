@@ -1,6 +1,6 @@
 ********************************************************************************
 * Project:	Protest in East and West Germany
-* Task:		Export 2-column regression table in LaTeX
+* Task:		Export regression tables for 3 models in LaTeX
 * Version:	06.04.2018
 * Author:	Philippe Joly, Humboldt-Universität zu Berlin
 ********************************************************************************
