@@ -81,12 +81,12 @@ foreach dv of varlist demonstration petition boycott {
 			(connected slope `level_`i'', sort mcolor(black) lcolor(black)) ///
 			(line fe_east `level_`i'', sort lcolor(black) lpattern(dash)), ///
 			`lines_`i'' ///
-			yline(0,lcolor(edkblue) ///
+			yline(0,lcolor(edkblue)) ///
 			xlab(`xlab_`i'') ///
 			xtitle(`xtitle_`i'') ///
 			ylab(0(-0.2)-0.6) ///
 			ytitle("Predicted effect of socialization in East Germany") ///
-			legend(order(3 "Random effect" 4 "Fixed effect")) ///
+			legend(order(2 "Random effect" 3 "Fixed effect")) ///
 			saving("${figures_gph}fig_`dv'-`level_`i''.gph", replace)
 		graph export "${figures_pdf}fig_`dv'-`level_`i''.pdf", replace
 		
@@ -95,8 +95,6 @@ foreach dv of varlist demonstration petition boycott {
 		drop b1 b2 se1 se2 slope ll ul fe_east
 	} 
 }
-drop yline
-
 * ______________________________________________________________________________
 * Export Tables
 
@@ -119,6 +117,18 @@ do "${programs}export_coefplot.do" ///
 	m_petition_1 "Petition" ///
 	m_boycott_1 "Boycott" ///
 	"fig_coefplot" // filename
+
+* ______________________________________________________________________________
+* LR Tests
+	
+lrtest m_demonstration_0 m_demonstration_1
+lrtest m_demonstration_0 m_demonstration_2
+
+lrtest m_petition_0 m_petition_1
+lrtest m_petition_0 m_petition_2
+
+lrtest m_boycott_0 m_boycott_1
+lrtest m_boycott_0 m_boycott_2
 	
 * ______________________________________________________________________________
 * Close
