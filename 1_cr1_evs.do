@@ -1,8 +1,7 @@
 ********************************************************************************
 * Project:	Protest in East and West Germany
-* File: 	1_cr1_evs.do
-* Task:		Extract raw EVS data and produce dataset for analysis
-* Version:	28.02.2018
+* Task:		Extract raw EVS data, export graph, and save dataset for analysis
+* Version:	01.05.2018
 * Author:	Philippe Joly, Humboldt-Universität zu Berlin
 ********************************************************************************
 
@@ -61,6 +60,20 @@ label values demonstration poliactlb // Copies label values
 * Year of birth | X002 --> yearborn
 gen yearborn = X002
 _crcslbl yearborn X002
+
+* ______________________________________________________________________________
+* Export graph
+
+twoway ///
+	(lpolyci demonstration yearborn if east == 1 & yearborn >= 1910 ///
+		[aweight = weight], clcolor(sky) fcolor(gs13) blcolor(gs13)) ///
+	(lpolyci demonstration yearborn if east == 0 & yearborn >= 1910 ///
+		[aweight = weight], clcolor(turquoise) fcolor(gs13) blcolor(gs13)), ///
+	ytitle("Having attended a demonstration, ever") xtitle("Year of birth") ///
+	xlabel(1910(20)1970) legend(order(2 "East Germany" 4 "West Germany")) ///
+	saving("${figures_gph}fig_evs_demo.gph", replace)
+	graph export "${figures_pdf}fig_evs_demo.pdf", replace
+
 
 * ______________________________________________________________________________
 * Save and close
