@@ -200,7 +200,7 @@ recode period (1=2002) (2=2004) (3=2006) (4=2008) (5=2010) (6=2012) (7=2014) ///
 	(8=2016)
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Cohort variable
-local c_min=1910
+local c_min=1920
 local c_max=1985
 local c_d=5
 gen cohort=.

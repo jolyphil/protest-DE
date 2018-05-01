@@ -33,7 +33,7 @@ local re_eq_1 "|| _all: R.period || cohort: eastsoc"
 
 *Graph options
 local lines_1 "xline(1929,lcolor(edkblue) lpattern(dash)) xline(1970,lcolor(edkblue) lpattern(dash))"
-local xlab_1 "1910(10)1985"
+local xlab_1 "1920(10)1985"
 local xtitle_1 "Birth cohorts"
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
