@@ -29,7 +29,7 @@ foreach dv of varlist demonstration petition boycott {
 		i.eastsoc#i.cohort i.eastsoc#i.period `controls'
 	est store m_`dv'
 	
-	margins if e(sample)==1, dydx(eastsoc) at(cohort=(1910(5)1985))
+	margins if e(sample)==1, dydx(eastsoc) at(cohort=(1920(5)1985))
 	marginsplot, ///
 		xline(1929,lcolor(edkblue) lpattern(dash)) ///
 		xline(1970,lcolor(edkblue) lpattern(dash)) ///
@@ -38,7 +38,7 @@ foreach dv of varlist demonstration petition boycott {
 		recastci(rarea) ///
 		ciop(lcolor(gs13))  ///
 		ci(fcolor(gs13)) ///
-		xtitle("Birth cohorts") xlab(1910(10)1980) ///
+		xtitle("Birth cohorts") xlab(1920(10)1980) ///
 		ytitle("Effect of socialization in East Germany") ///
 		title("") ///
 		saving("${figures_gph}fig_`dv'-cohort_FE.gph", replace)
