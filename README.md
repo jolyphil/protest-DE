@@ -17,7 +17,6 @@ A few steps are necessary to run the analysis.
 * Download the "country file (subset of integrated file)" in Stata format (.dta) for each of the eight ESS rounds. 
 * Place the datafiles in their appropriate folder in `data/raw/`.
   * Example: `data/raw/ESS_1/Country file/ESS1DE.dta`
-* Place the `ESS_miss.do` file provided by the ESS in `data/raw/ESS_miss/`.
 
 ### 2.2. Country-specific data
 
