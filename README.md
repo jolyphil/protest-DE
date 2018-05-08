@@ -10,7 +10,7 @@ A few steps are necessary to run the analysis.
 
 ## 2. Download the ESS data
 
-* Go to the European Social Survey website and, from there, on [the page for Germany]( http://www.europeansocialsurvey.org/data/country.html?c=germany).
+* Go to the European Social Survey website and, from there, on [Germany's page]( http://www.europeansocialsurvey.org/data/country.html?c=germany).
 
 ### 2.1. Country files
 
@@ -21,9 +21,9 @@ A few steps are necessary to run the analysis.
 
 ### 2.2. Country-specific data
 
-* Unfortunately, the ESS only provides country-specific data as SPSS portable files (.por)
+* Unfortunately, the ESS only provides country-specific data as SPSS portable files (.por).
 * You will need to convert the files in .dta format.
-  * The safest way to do this is to open the files in SPSS, from there, and to save them as .dta.
+  * The safest way to do this is to open the files in SPSS and, from there, to save them as .dta.
   * Another option (which I have not tried) would be to open the files in R using the `Hmisc` package and save them back to .dta using the `foreign` package.
 * Once you have saved the eight datafiles, place them in their appropriate folder in `data/raw/`.
   * Example: `data/raw/ESS_1/Country-specific data/ESS1csDE.dta`
