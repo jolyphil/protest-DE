@@ -37,7 +37,7 @@ A few steps are necessary to run the analysis.
 * The repository contains a do-file, `mydirectory.do`, which details the hierarchical structure of the repository and allows to save the path to each folder in global macros. 
 * If you cloned the repository, the only change you would need to do is to add the path to your local copy of the repository.
   * Update the line `global path "N:/Analyses/protest-DE/"` with the path to your local copy of the repository. Be sure that your path ends with `/`
-* Double-check that the path to the source datafiles is correct.
+* Double-check that the paths to the source datafiles are correct.
 * Run `mydirectory.do` to save the global macros. 
 
 ## 5. Run the analysis
