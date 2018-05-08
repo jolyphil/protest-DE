@@ -10,11 +10,17 @@
 # database files
 *.db
 
+# figures gph
+*.gph
+
 # figures pdf
 *.pdf
 
-# figures gph
-*.gph
+# figures png
+*.png
+
+# tables rtf
+*.rtf
 
 # tables tex
 *.tex

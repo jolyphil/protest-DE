@@ -53,8 +53,8 @@ foreach dv of varlist demonstration petition boycott {
 	* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 	* Random-intercept model
 
-	meqrlogit `dv' `fe_eq' || _all: R.period || cohort:
-	est store m_`dv'_0 
+	* meqrlogit `dv' `fe_eq' || _all: R.period || cohort:
+	* est store m_`dv'_0 
 	
 	forvalues i=1/2 {
 		
@@ -89,6 +89,8 @@ foreach dv of varlist demonstration petition boycott {
 			legend(order(2 "Random effect" 3 "Fixed effect")) ///
 			saving("${figures_gph}fig_`dv'-`level_`i''.gph", replace)
 		graph export "${figures_pdf}fig_`dv'-`level_`i''.pdf", replace
+		graph export "${figures_png}fig_`dv'-`level_`i''.png", replace ///
+			width(2750) height(2000)
 		
 		* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 		* Clear
@@ -98,17 +100,29 @@ foreach dv of varlist demonstration petition boycott {
 * ______________________________________________________________________________
 * Export Tables
 
-do "${programs}export_tab_APC_models_tex.do" ///
+do "${programs}export_tab_APC_models_tex.do" /// Random-slope cohort: TeX
 	m_demonstration_1 /// Model 1
 	m_petition_1 /// Model 2
 	m_boycott_1 /// Model 3
 	tab_APC_rs_cohort // filename
+	
+do "${programs}export_tab_APC_models_rtf.do" /// Random-slope cohort: RTF
+	m_demonstration_1 ///
+	m_petition_1 ///
+	m_boycott_1 ///
+	tab_APC_rs_cohort //
 
-do "${programs}export_tab_APC_models_tex.do" ///
+do "${programs}export_tab_APC_models_tex.do" /// Random-slope period: TeX
 	m_demonstration_2 ///
 	m_petition_2 ///
 	m_boycott_2 ///
-	tab_APC_rs_period // filename
+	tab_APC_rs_period //
+	
+do "${programs}export_tab_APC_models_rtf.do" /// Random-slope period: RTF
+	m_demonstration_2 ///
+	m_petition_2 ///
+	m_boycott_2 ///
+	tab_APC_rs_period //
 * ______________________________________________________________________________
 * Export Graph
 
