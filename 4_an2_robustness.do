@@ -7,7 +7,7 @@
 
 version 14
 capture log close
-capture log using "${logfiles}5_an2_robustness.smcl", replace
+capture log using "${logfiles}4_an2_robustness.smcl", replace
 set more off
 
 * ______________________________________________________________________________
@@ -53,10 +53,13 @@ foreach dv of varlist demonstration petition boycott {
 		ciop(lcolor(gs13))  ///
 		ci(fcolor(gs13)) ///
 		xtitle("Periods") xlab(2002(2)2016) ///
-		ytitle("Effect of socialization in East Germany") ///
+		ytitle("Effect of socialization in Eastern Germany") ///
 		title("") ///
 		saving("${figures_gph}fig_`dv'-period_FE.gph", replace)
+	graph export "${figures_emf}fig_`dv'-period_FE.emf", replace
 	graph export "${figures_pdf}fig_`dv'-period_FE.pdf", replace
+	graph export "${figures_png}fig_`dv'-period_FE.png", replace ///
+		width(2750) height(2000)
 }	
 * ______________________________________________________________________________
 * Close

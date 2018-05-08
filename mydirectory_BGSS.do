@@ -1,28 +1,22 @@
-/*
-*******************************************************************************
-Last Update: 15.12.2017
-Philippe Joly (HU-BGSS)
+********************************************************************************
+* Project:	Protest in East and West Germany
+* Task:		Set up working directory
+* Version:	08.05.2018
+* Author:	Philippe Joly, Humboldt-Universität zu Berlin
+********************************************************************************
 
-TRAJECTORIES OF PROTEST IN POST-AUTOCRATIC CONTEXTS
-Assessing the Legacies of the Past in East Germany
-
-Directory structure
-
-*******************************************************************************
-*/
-
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* ______________________________________________________________________________
 * Main path
 
 global path "N:/Analyses/protest-DE/"
 
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* ______________________________________________________________________________
 * Folders
 
 global data "C:/Users/jolyphil/Documents/Data/protest-DE/data/"
 	global data_raw "${data}raw/"
-global estfiles "${path}estfiles/"
 global figures "${path}figures/"
+	global figures_emf "${figures}emf/"
 	global figures_gph "${figures}gph/"
 	global figures_pdf "${figures}pdf/"
 	global figures_png "${figures}png/"
@@ -33,7 +27,7 @@ global tables "${path}tables/"
 	global tables_rtf "${tables}rtf/"
 	global tables_tex "${tables}tex/"
 
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* ______________________________________________________________________________
 * Source datafiles
 
 global evslg "${data_raw}EVS_longitudinal/ZA4804_v3-0-0.dta" // EVS Longitudinal
@@ -56,12 +50,12 @@ global ess6_cs "${data_raw}ESS_6/Country-specific data/ESS6csDE.dta" // ESS 6 Co
 global ess7_cs "${data_raw}ESS_7/Country-specific data/ESS7csDE.dta" // ESS 7 Country-specific file
 global ess8_cs "${data_raw}ESS_8/Country-specific data/ESS8csDE.dta" // ESS 8 Country-specific file
 
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* ______________________________________________________________________________
 * Source ESS miss do-file
 
 global ess_miss "${data_raw}ESS_miss/ESS_miss.do" // Provided by ESS, handles missing data
 
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* ______________________________________________________________________________
 * Plot schemes: 
 
 * 	Adds a scheme directory to the beginning of the search path stored in the 
