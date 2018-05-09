@@ -27,3 +27,7 @@
 
 # tables tex
 *.tex
+
+# local directory files
+mydirectory_BGSS.do
+mydirectory_WZB.do
