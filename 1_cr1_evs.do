@@ -10,6 +10,8 @@ capture log close
 capture log using "${logfiles}1_cr1_evs.smcl", replace
 set more off
 
+set scheme minimal
+
 * ______________________________________________________________________________
 * Get EVS data
 
@@ -66,15 +68,17 @@ _crcslbl yearborn X002
 
 twoway ///
 	(lpolyci demonstration yearborn if east == 1 & yearborn >= 1910 ///
-		[aweight = weight], clcolor(sky) fcolor(gs13) blcolor(gs13)) ///
+		[aweight = weight], clcolor(ebblue) fcolor(gs13) blcolor(gs13)) ///
 	(lpolyci demonstration yearborn if east == 0 & yearborn >= 1910 ///
-		[aweight = weight], clcolor(turquoise) fcolor(gs13) blcolor(gs13)), ///
+		[aweight = weight], clcolor(green) fcolor(gs13) blcolor(gs13)), ///
 	ytitle("Having attended a demonstration, ever") xtitle("Year of birth") ///
 	xlabel(1910(20)1970) legend(order(2 "East Germany" 4 "West Germany")) ///
 	saving("${figures_gph}fig_evs_demo.gph", replace)
+	graph export "${figures_emf}fig_evs_demo.emf", replace
 	graph export "${figures_pdf}fig_evs_demo.pdf", replace
-
-
+	graph export "${figures_png}fig_evs_demo.png", replace ///
+		width(2750) height(2000)
+		
 * ______________________________________________________________________________
 * Save and close
 

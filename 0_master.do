@@ -14,4 +14,4 @@ set more off
 do "${path}1_cr1_evs.do"
 do "${path}2_cr2_ess.do"
 do "${path}3_an1.do"
-do "${path}4_an2_robustness.do"
+*do "${path}4_an2_robustness.do"

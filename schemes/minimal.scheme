@@ -24,13 +24,13 @@ color legend_line        none
 
 color p      black
 color p1     gs10
-color p2     sky
-color p3     turquoise
-color p4     orangebrown
-color p5     reddish
-color p6     vermillon
-color p7     sea
-color p8     ananas
+color p2     ebblue
+color p3     green
+color p4     orange
+color p5     cranberry
+color p6     dkorange
+color p7     navy8
+color p8     yellow
 
 gsize axis_title		medsmall
 gsize axis_title_gap	medium

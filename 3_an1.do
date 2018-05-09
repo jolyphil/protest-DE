@@ -13,6 +13,8 @@ set more off
 ssc install estout
 ssc install coefplot
 
+set scheme minimal
+
 * ______________________________________________________________________________
 * Load ESS MI dataset
 
