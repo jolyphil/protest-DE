@@ -39,10 +39,13 @@ foreach dv of varlist demonstration petition boycott {
 		ciop(lcolor(gs13))  ///
 		ci(fcolor(gs13)) ///
 		xtitle("Birth cohorts") xlab(1920(10)1980) ///
-		ytitle("Effect of socialization in East Germany") ///
+		ytitle("Effect of socialization in Eastern Germany") ///
 		title("") ///
 		saving("${figures_gph}fig_`dv'-cohort_FE.gph", replace)
+	capture graph export "${figures_emf}fig_`dv'-cohort_FE.emf", replace
 	graph export "${figures_pdf}fig_`dv'-cohort_FE.pdf", replace
+	graph export "${figures_png}fig_`dv'-cohort_FE.png", replace ///
+		width(2750) height(2000)
 	
 	est restore m_`dv'
 	margins if e(sample)==1, dydx(eastsoc) at(period=(2002(2)2016))
@@ -56,7 +59,7 @@ foreach dv of varlist demonstration petition boycott {
 		ytitle("Effect of socialization in Eastern Germany") ///
 		title("") ///
 		saving("${figures_gph}fig_`dv'-period_FE.gph", replace)
-	graph export "${figures_emf}fig_`dv'-period_FE.emf", replace
+	capture graph export "${figures_emf}fig_`dv'-period_FE.emf", replace
 	graph export "${figures_pdf}fig_`dv'-period_FE.pdf", replace
 	graph export "${figures_png}fig_`dv'-period_FE.png", replace ///
 		width(2750) height(2000)

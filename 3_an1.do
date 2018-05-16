@@ -87,7 +87,7 @@ foreach dv of varlist demonstration petition boycott {
 			xlab(`xlab_`i'') ///
 			xtitle(`xtitle_`i'') ///
 			ylab(0(-0.2)-0.6) ///
-			ytitle("Predicted effect of socialization in Eastern Germany") ///
+			ytitle("Effect of socialization in Eastern Germany") ///
 			legend(order(2 "Random effect" 3 "Fixed effect")) ///
 			saving("${figures_gph}fig_`dv'-`level_`i''.gph", replace)
 		capture graph export "${figures_emf}fig_`dv'-`level_`i''.emf", replace
