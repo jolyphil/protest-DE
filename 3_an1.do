@@ -55,8 +55,8 @@ foreach dv of varlist demonstration petition boycott {
 	* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 	* Random-intercept model
 
-	* meqrlogit `dv' `fe_eq' || _all: R.period || cohort:
-	* est store m_`dv'_0 
+	meqrlogit `dv' `fe_eq' || _all: R.period || cohort:
+	est store m_`dv'_0 
 	
 	forvalues i=1/2 {
 		
