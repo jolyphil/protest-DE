@@ -74,7 +74,7 @@ twoway ///
 	ytitle("Having attended a demonstration, ever") xtitle("Year of birth") ///
 	xlabel(1910(20)1970) legend(order(2 "East Germany" 4 "West Germany")) ///
 	saving("${figures_gph}fig_evs_demo.gph", replace)
-	graph export "${figures_emf}fig_evs_demo.emf", replace
+	capture graph export "${figures_emf}fig_evs_demo.emf", replace
 	graph export "${figures_pdf}fig_evs_demo.pdf", replace
 	graph export "${figures_png}fig_evs_demo.png", replace ///
 		width(2750) height(2000)
