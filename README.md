@@ -14,22 +14,23 @@ A few steps are necessary to run the analysis.
 
 ### 2.1. Country files
 
-* Download the "country file (subset of integrated file)" in Stata format (.dta) for each of the eight ESS rounds. 
+* Download the "country file (subset of integrated file)" in Stata format (dta) for each of the eight ESS rounds. 
 * Place the datafiles in their appropriate folder in `data/raw/`.
   * Example: `data/raw/ESS_1/Country file/ESS1DE.dta`
 
 ### 2.2. Country-specific data
 
-* Unfortunately, the ESS only provides country-specific data as SPSS portable files (.por).
-* You will need to convert the files in .dta format.
-  * The safest way to do this is to open the files in SPSS and, from there, to save them as .dta.
+* Unfortunately, the ESS only provides country-specific data as SPSS portable files (por).
+* You will need to obtain files in dta format.
+  * The safest way to do this is to open the files in SPSS and, from there, to save them as dta.
   * Another option (which I have not tried) would be to open the files in R using the `Hmisc` package and save them back to .dta using the `foreign` package.
+  * I will also make the dta files available on my OSF page (more information soon).
 * Once you have saved the eight datafiles, place them in their appropriate folder in `data/raw/`.
   * Example: `data/raw/ESS_1/Country-specific data/ESS1csDE.dta`
 
 ## 3. Download the EVS data
 
-* If you want to reproduce Figure 1, download the EVS Longitudinal datafile from the [Gesis website]( https://dbk.gesis.org/dbksearch/SDesc2.asp?ll=10&notabs=&af=&nf=&search=&search2=&db=E&no=4804).
+* To reproduce Figure 1, download the EVS Longitudinal datafile from the [Gesis website]( https://dbk.gesis.org/dbksearch/SDesc2.asp?ll=10&notabs=&af=&nf=&search=&search2=&db=E&no=4804).
 * Save the file as `data/raw/EVS_longitudinal/ZA4804_v3-0-0.dta`.
 
 ## 4. Set up your working directory
