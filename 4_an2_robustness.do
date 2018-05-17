@@ -1,7 +1,7 @@
 ********************************************************************************
-* Project:	Protest in East and West Germany
+* Project:	Generations and Protest in Eastern Germany
 * Task:		Robustness checks
-* Version:	12.04.2018
+* Version:	17.05.2018
 * Author:	Philippe Joly, Humboldt-Universität zu Berlin
 ********************************************************************************
 
@@ -30,7 +30,7 @@ foreach dv of varlist demonstration petition boycott {
 	est store m_`dv'
 	
 	margins if e(sample)==1, dydx(eastsoc) at(cohort=(1920(5)1985))
-	marginsplot, ///
+	marginsplot, /// exports Figures A1 to A3
 		xline(1929,lcolor(edkblue) lpattern(dash)) ///
 		xline(1970,lcolor(edkblue) lpattern(dash)) ///
 		yline(0,lcolor(edkblue)) ///
@@ -49,7 +49,7 @@ foreach dv of varlist demonstration petition boycott {
 	
 	est restore m_`dv'
 	margins if e(sample)==1, dydx(eastsoc) at(period=(2002(2)2016))
-	marginsplot, ///
+	marginsplot, /// exports Figures A4 to A6
 		yline(0,lcolor(edkblue)) ///
 		plotop(mcolor(black) lcolor(black)) ///
 		recastci(rarea) ///

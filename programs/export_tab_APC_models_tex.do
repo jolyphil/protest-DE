@@ -1,7 +1,7 @@
 ********************************************************************************
-* Project:	Protest in East and West Germany
-* Task:		Export regression tables for 3 models in LaTeX
-* Version:	06.04.2018
+* Project:	Generations and Protest in Eastern Germany
+* Task:		Export regression tables for 3 models in TeX
+* Version:	17.05.2018
 * Author:	Philippe Joly, Humboldt-Universität zu Berlin
 ********************************************************************************
 * ______________________________________________________________________________

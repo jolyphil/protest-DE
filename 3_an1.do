@@ -1,7 +1,7 @@
 ********************************************************************************
-* Project:	Protest in East and West Germany
+* Project:	Generations and Protest in Eastern Germany
 * Task:		Perform APC analysis on ESS data
-* Version:	09.03.2018
+* Version:	17.05.2018
 * Author:	Philippe Joly, Humboldt-Universität zu Berlin
 ********************************************************************************
 
@@ -78,6 +78,8 @@ foreach dv of varlist demonstration petition boycott {
 		
 		* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 		* Graph
+		* Note: exports Figures 3 to 8
+		
 		twoway ///
 			(rarea ll ul `level_`i'', sort fcolor(gs13) lcolor(gs13)) ///
 			(connected slope `level_`i'', sort mcolor(black) lcolor(black)) ///
@@ -103,31 +105,32 @@ foreach dv of varlist demonstration petition boycott {
 * ______________________________________________________________________________
 * Export Tables
 
-do "${programs}export_tab_APC_models_tex.do" /// Random-slope cohort: TeX
+do "${programs}export_tab_APC_models_tex.do" /// Table A1 R.-slope cohort: TeX
 	m_demonstration_1 /// Model 1
 	m_petition_1 /// Model 2
 	m_boycott_1 /// Model 3
 	tab_APC_rs_cohort // filename
 	
-do "${programs}export_tab_APC_models_rtf.do" /// Random-slope cohort: RTF
+do "${programs}export_tab_APC_models_rtf.do" /// Table A1 R.-slope cohort: RTF
 	m_demonstration_1 ///
 	m_petition_1 ///
 	m_boycott_1 ///
 	tab_APC_rs_cohort //
 
-do "${programs}export_tab_APC_models_tex.do" /// Random-slope period: TeX
+do "${programs}export_tab_APC_models_tex.do" /// Table A2 R.-slope period: TeX
 	m_demonstration_2 ///
 	m_petition_2 ///
 	m_boycott_2 ///
 	tab_APC_rs_period //
 	
-do "${programs}export_tab_APC_models_rtf.do" /// Random-slope period: RTF
+do "${programs}export_tab_APC_models_rtf.do" /// Table A2 R.-slope period: RTF
 	m_demonstration_2 ///
 	m_petition_2 ///
 	m_boycott_2 ///
 	tab_APC_rs_period //
 * ______________________________________________________________________________
 * Export Graph
+* Note: exports Figure 2
 
 do "${programs}export_coefplot.do" ///
 	m_demonstration_1 "Demonstration" ///

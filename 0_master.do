@@ -1,12 +1,16 @@
 ********************************************************************************
-* Project:	Protest in East and West Germany
+* Project:	Generations and Protest in Eastern Germany
 * Task:		Execute all do-files of the repository
-* Version:	12.04.2018
+* Version:	17.05.2018
 * Author:	Philippe Joly, Humboldt-Universität zu Berlin
 ********************************************************************************
 
 version 14
 set more off
+
+* Important:
+* Run mydirectory.do before executing this master do-file.
+* mydirectory.do loads paths to the folders of the repository in global macros.
 
 * ______________________________________________________________________________
 * Run all do-files

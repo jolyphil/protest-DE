@@ -1,14 +1,18 @@
 ********************************************************************************
-* Project:	Protest in East and West Germany
+* Project:	Generations and Protest in Eastern Germany
 * Task:		Set up working directory
-* Version:	08.05.2018
+* Version:	17.05.2018
 * Author:	Philippe Joly, Humboldt-Universität zu Berlin
 ********************************************************************************
+
+* Important:
+* Run this do-file before executing master.do
+* mydirectory.do loads paths to the folders of the repository in global macros.
 
 * ______________________________________________________________________________
 * Main path
 
-global path "M:/user/joly/Analyses/protest-DE/"
+global path "M:/user/joly/Analyses/protest-DE/" // **Put your own path here**
 
 * ______________________________________________________________________________
 * Folders

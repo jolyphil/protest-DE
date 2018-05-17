@@ -1,7 +1,7 @@
 ********************************************************************************
-* Project:	Protest in East and West Germany
+* Project:	Generations and Protest in Eastern Germany
 * Task:		Export coefplot (fixed effects without land effects)
-* Version:	10.04.2018
+* Version:	17.05.2018
 * Author:	Philippe Joly, Humboldt-Universität zu Berlin
 ********************************************************************************
 * ______________________________________________________________________________

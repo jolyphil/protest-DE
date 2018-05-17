@@ -1,7 +1,7 @@
 ********************************************************************************
-* Project:	Protest in East and West Germany
+* Project:	Generations and Protest in Eastern Germany
 * Task:		Extract raw EVS data, export graph, and save dataset for analysis
-* Version:	01.05.2018
+* Version:	17.05.2018
 * Author:	Philippe Joly, Humboldt-Universität zu Berlin
 ********************************************************************************
 
@@ -65,6 +65,7 @@ _crcslbl yearborn X002
 
 * ______________________________________________________________________________
 * Export graph
+* Note: exports Figure 1
 
 twoway ///
 	(lpolyci demonstration yearborn if east == 1 & yearborn >= 1910 ///

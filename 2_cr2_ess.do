@@ -1,8 +1,7 @@
 ********************************************************************************
-* Project:	Protest in East and West Germany
-* File: 	2_cr2_ess.do
+* Project:	Generations and Protest in Eastern Germany
 * Task:		Extract raw ESS data and produce dataset for analysis
-* Version:	28.02.2018
+* Version:	17.05.2018
 * Author:	Philippe Joly, Humboldt-Universität zu Berlin
 ********************************************************************************
 
@@ -125,6 +124,8 @@ drop age
 gen age = agea if agea <= 100
 label variable age "Age of respondent"
 
+* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+* Current Age (10 years) | agea --> age10
 gen age10 = agea/10 if agea <= 100
 label variable age10 "Age of respondent (10 years)"
 
@@ -226,21 +227,6 @@ label values female femalelb
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Age --> age, Already defined; see previous section.
 
-/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Highest level of education (7 categories) | eisced --> edu7
-gen edu7 = eisced
-replace edu7 = . if eisced > 7
-_crcslbl edu7 eisced
-label define edu7lb ///
-	1 "Less than lower secondary" ///
-	2 "Lower secondary" ///
-	3 "Lower tier upper secondary" ///
-	4 "Upper tier upper secondary" ///
-	5 "Advanced vocational, sub-degree" ///
-	6 "Lower tertiary education" ///
-	7 "Higher tertiary education", modify
-label values edu7 edu7lb */
-
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Highest level of education (3 categories) | eisced --> edu3
 recode eisced (1/2 = 1) (3/5 = 2) (6/7 = 3) (else = .), gen(edu3)
@@ -250,33 +236,6 @@ label define edu3lb ///
 	2 "Middle" ///
 	3 "Upper", modify
 label values edu3 edu3lb
-
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Income | hinctnt, hinctnta --> incquart (income in quartiles)
-
-* Note:	This procedures harmonizes 2 different measures of income. The ESS 
-*		changed its methodology starting round 4. 
-* 		See:
-* 		https://www.europeansocialsurvey.org/docs/round4/survey/ESS4_appendix_a5_e05_0.pdf
-
-gen incquart=.
-forvalues i = 1(1)3 {
-	xtile incquart_`i' = hinctnt if (essround==`i'), nq(4)
-}
-forvalues i = 4(1)8 {
-	xtile incquart_`i' = hinctnta if (essround==`i'), nq(4)
-}
-forvalues i = 1(1)8 {
-	replace incquart = incquart_`i' if essround==`i'
-}
-drop incquart_*
-label variable incquart "Income groups"
-label define incquartlb ///
-	1 "Q1" ///
-	2 "Q2" ///
-	3 "Q3" ///
-	4 "Q4", modify
-label values incquart incquartlb
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Unemployed | mnactic --> unemp (0:no, 1:yes)
@@ -311,6 +270,9 @@ label values city citylb
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Social class (Oesch 2006) | --> class5
+* Note: the 3 do-files mentionned below are taken directly from Oesch's website
+* See:
+* http://people.unil.ch/danieloesch/scripts/
 
 * Preserve dataset before splitting sample 
 tempfile master  // temporary dataset
@@ -343,78 +305,6 @@ append using "`ess_4_5'"
 * Drop unnecessary variables
 drop class16_r class8_r class5_r class16_p class8_p class5_p class16 class8
 
-/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Attendance of religious services | rlgatnd --> relig
-gen relig = rlgatnd
-_crcslbl relig rlgatnd
-replace relig = 7 + 1 - relig // Inverses ordinal scale
-recode relig (7 = 6)
-label define religlb				///
-	1 "Never practically never"		///
-	2 "Less often"					///
-	3 "Only on special holy days"	///
-	4 "Once a month"				///
-	5 "Once a week"					///
-	6 "More than once a week", modify
-label values relig religlb */
-
-* ______________________________________________________________________________
-* Political attitudes
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Political interest | polint --> polintr
-gen polint = polintr
-_crcslbl polint polintr
-replace polint = 4 + 1 - polint // Inverses ordinal scale
-label define polintlb				///
-	1 "Not at all interested"		///
-	2 "Hardly interested"			///
-	3 "Quite interested"			///
-	4 "Very interested", modify
-label values polint polintlb
-
-/* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Trust in the legal system | trstlgl --> trustlegal
-gen trustlegal = trstlgl 
-_crcslbl trustlegal trstlgl
-label values trustlegal trstlgl
-
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Trust in the parliament | trstprl --> trustparl
-gen trustparl = trstprl
-_crcslbl trustparl trstprl
-label values trustparl trstprl
-
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Trust in the political parties | trstprt --> trustparties
-gen trustparties = trstprt
-_crcslbl trustparties trstprt
-replace trustparties = trstplde if essround == 1
-label values trustparties trstprt 
-
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Most people can be trusted | ppltrst --> trustpeople
-gen trustpeople = ppltrst
-_crcslbl trustpeople ppltrst
-label values trustpeople ppltrst
-*/
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Satisfied with the way democracy works | stfdem --> stfdem
-* Ok! No recode.
-
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Satisfied with life as a whole | stflife --> stflife
-* Ok! No recode.
-
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Left-Right Scale | lrscale --> lrscale
-* Ok! No recode.
-
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Cultural life enriched by immigrants | imueclt --> promigrant
-gen promigrant = imueclt
-_crcslbl promigrant imueclt
-label values promigrant imueclt
-
 * ______________________________________________________________________________
 * Save and close
 
@@ -422,8 +312,7 @@ keep dweight ///
 	petition boycott demonstration ///
 	land eastintv eastsoc ///
 	period cohort cohorteast ///
-	age age10 female edu3 incquart unemp union city class5 ///
-	stfdem promigrant
+	age age10 female edu3 unemp union city class5
 
 save "${data}ess.dta", replace
 
