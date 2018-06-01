@@ -15,7 +15,14 @@ set more off
 * ______________________________________________________________________________
 * Run all do-files
 
-do "${path}1_cr1_evs.do"
+do "${path}1_cr1_evs.do" 
+	// Task: Extract raw EVS data, export graph, and save dataset for analysis
+	
 do "${path}2_cr2_ess.do"
+	// Task: Extract raw ESS data and produce dataset for analysis
+
 do "${path}3_an1.do"
+	// Task: Perform age-period-cohort (APC) analysis on ESS data
+
 do "${path}4_an2_robustness.do"
+	// Task: Run robustness checks
