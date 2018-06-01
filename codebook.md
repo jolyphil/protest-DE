@@ -16,6 +16,7 @@ Philippe Joly (2018)
 | eastintv      | Place of Interview, Eastern/Western Germany
 | age           | Age of respondent
 | age10         | Age of respondent (10 years)
+| eastsoc       | Region of early socialization, Eastern/Western Germany
 | period        | Period (survey round)
 | cohort        | Birth cohort
 | female        | Gender
@@ -131,6 +132,18 @@ Philippe Joly (2018)
 **Range**: [1.5,10]
 
 **Unique values**: 85
+
+---
+
+### `eastsoc`
+**Type**: factor
+
+**Description**: Region of early socialization, Eastern/Western Germany
+
+**Coding**:
+
+0. Western Germany
+1. Eastern Germany
 
 ---
 
