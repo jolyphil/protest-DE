@@ -208,10 +208,6 @@ gen cohort=.
 forvalues c = `c_min'(`c_d')`c_max' {
 	replace cohort=`c' if yrbrn>=`c' & yrbrn<=(`c'+`c_d'-1)
 }
-* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
-* Cohort-east variable
-egen cohorteast = group(cohort eastsoc), label
-
 * ______________________________________________________________________________
 * Socio-demographic and socio-economic variables
 
@@ -311,7 +307,7 @@ drop class16_r class8_r class5_r class16_p class8_p class5_p class16 class8
 keep dweight ///
 	petition boycott demonstration ///
 	land eastintv eastsoc ///
-	period cohort cohorteast ///
+	period cohort ///
 	age age10 female edu3 unemp union city class5
 
 save "${data}ess.dta", replace
