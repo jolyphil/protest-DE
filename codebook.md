@@ -4,6 +4,29 @@ Philippe Joly (2018)
 
 ---
 
+### Variable List
+
+| Variable      | Description
+| ------------- | ---------------------------------------------------------
+| dweight       | Design weight
+| petition      | Signed petition, last 12 months
+| boycott       | Boycotted certain products, last 12 months
+| demonstration | Taken part in lawful public demonstration, last 12 months
+| land          | Land
+| eastintv      | Place of Interview, Eastern/Western Germany
+| age           | Age of respondent
+| age10         | Age of respondent (10 years)
+| period        | Period (survey round)
+| cohort        | Birth cohort
+| female        | Gender
+| edu3          | Highest level of education
+| unemp         | Unemployed
+| union         | Member of trade union or similar organisation
+| city          | Size of town/city
+| class5        | Final Oesch class position - 5 classes
+
+---
+
 ### `dweight`
 **Type**: numeric
 
