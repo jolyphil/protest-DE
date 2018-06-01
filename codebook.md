@@ -1,9 +1,3 @@
----
-output:
-  html_document: default
-  pdf_document: default
----
-
 # Generations and Protest in Eastern Germany: Between Revolution and Apathy
 ## Codebook (final dataset: `ess.dta`)
 Philippe Joly (2018)
