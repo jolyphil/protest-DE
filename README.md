@@ -62,7 +62,7 @@ Oesch, Daniel. 2006b. _Redrawing the Class Map: Stratification and Institutions 
 
 ## Codebook
 
-The repository contains a **codebook**, `codebook.md`, describing all variables in the final dataset (`ess.dta`).
+Running `2_cr2_ess.do` will transform the ESS raw data to produce a final dataset, `ess.dta`. The repository contains a **codebook**, `codebook.md`, describing all variables in the final dataset.
 
 
 # 4 Instructions to reproduce the analysis
