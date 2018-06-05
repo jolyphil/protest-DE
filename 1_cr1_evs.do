@@ -71,7 +71,7 @@ twoway ///
 	(lpolyci demonstration yearborn if east == 1 & yearborn >= 1910 ///
 		[aweight = weight], clcolor(ebblue) fcolor(gs13) blcolor(gs13)) ///
 	(lpolyci demonstration yearborn if east == 0 & yearborn >= 1910 ///
-		[aweight = weight], clcolor(green) fcolor(gs13) blcolor(gs13)), ///
+		[aweight = weight], clpattern(dash) clcolor(green) fcolor(gs13) blcolor(gs13)), ///
 	ytitle("Having attended a demonstration, ever") xtitle("Year of birth") ///
 	xlabel(1910(20)1970) legend(order(2 "East Germany" 4 "West Germany")) ///
 	saving("${figures_gph}fig_evs_demo.gph", replace)
