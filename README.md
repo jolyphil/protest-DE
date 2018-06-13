@@ -101,18 +101,18 @@ A few steps are necessary to run the analysis.
 
 ### a) Country files
 
-* Download the "country file (subset of integrated file)" in Stata format (dta) for each of the eight ESS rounds. 
+* Download the "country file (subset of integrated file)" in Stata format (DTA) for each of the eight ESS rounds. 
 * Place the datafiles in their appropriate folder in `data/raw/`.
   * Example: `data/raw/ESS_1/Country file/ESS1DE.dta`
 
 ### b) Country-specific data
 
-* Unfortunately, the ESS only provides country-specific data as SPSS portable files (por).
-* You will need to obtain files in dta format.
-  * The safest way to do this is to open the files in SPSS and, from there, to save them as dta.
-  * Another option (which I have not tried) would be to open the files in R using the `Hmisc` package and save them back to .dta using the `foreign` package.
-  * I will also make the dta files available on my OSF page (more information soon).
-* Once you have saved the eight datafiles, place them in their appropriate folder in `data/raw/`.
+* Unfortunately, the ESS only provides country-specific data as SPSS portable files (POR).
+* You will need to obtain files in DTA format.
+  * The safest way to do this is to open the POR files in SPSS and, from there, to save them as DTA.
+  * Another option (which I have not tried) would be to open the files in R using the `memisc` package and save them back to DTA using the `haven` package.
+  * Finally, I also make the DTA files available on [my OSF page](https://osf.io/7cjt8/).
+* Once you have downloaded the eight datafiles, place them in their appropriate folder in `data/raw/`.
   * Example: `data/raw/ESS_1/Country-specific data/ESS1csDE.dta`
 
 ## Step 3: Download the EVS data
