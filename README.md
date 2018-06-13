@@ -130,4 +130,4 @@ A few steps are necessary to run the analysis.
 
 ## Step 5: Run the analysis
 
-* Run `master.do`. 
+* Run `0_master.do`. 
