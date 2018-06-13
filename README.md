@@ -9,7 +9,29 @@
 # 1 Description
 This repository assembles documentation and scripts to reproduce the findings of Philippe Joly's paper entitled "Generations and Protest in Eastern Germany: Between Revolution and Apathy" (2018) in Stata (version 14 or more recent).
 
-This paper examines the protest behavior of citizens socialized in Eastern Germany, a region marked by two legacies: a legacy of autocracy and, following the 1989-90 revolution, a legacy of transitional mobilization. Using age-period-cohort models with data from the European Social Survey, the analysis assesses the evolution of gaps in protest across generations and time between East and West Germans. The results demonstrate that participation in demonstrations, petitions, and boycotts is lower for East Germans socialized under communism in comparison with West Germans from the same cohorts. This participation deficit remains stable over time and even increases for certain protest activities.
+## 1.1 Abstract of the research project
+
+How is the protest behavior of citizens in new democracies influenced by their experience of the past? Certain theories of political socialization hold that cohorts reaching political maturity under dictatorship are subject to apathy. Yet, it remains unclear whether mobilization during the transition can counterbalance this effect. This article examines the protest behavior of citizens socialized in Eastern Germany, a region marked by two legacies: a legacy of autocracy and, following the 1989-90 revolution, a legacy of transitional mobilization. Using age-period-cohort models with data from the European Social Survey, the analysis assesses the evolution of gaps in protest across generations and time between East and West Germans. The results demonstrate that participation in demonstrations, petitions, and boycotts is lower for East Germans socialized under communism in comparison with West Germans from the same cohorts. This participation deficit remains stable over time and even increases for certain protest activities.
+
+## 1.2 What this repository contains
+
+* Folders
+  * `data/` contains empty subfolders where you can save the ESS raw data. Generated data will also be saved there.
+  * `figures/` contains empty subfolders where figures will be saved in different formats: GPH, EMF, PDF, and PNG.
+  * `logfiles/` is an empty folder where Stata logfiles will be stored.
+  * `programms/` contains a series of do-files. Files with names like `export_*.do` are programms exporting tables and figures. The folder also contains Oesch's do-files to generate social class variables.
+  * `schemes/` contains the file `minimal.scheme`, a Stata scheme I designed to export my figures.
+  * `tables/` contains empty subfolders where tables will be saved in TEX or RTF formats.
+* Do-files
+  * `0_master.do` executes all do-files of the repository.
+  * `1_cr1_evs.do` extracts raw EVS data, exports Figure 1, and saves EVS dataset.
+  * `2_cr2_ess.do` extracts raw ESS data and produces dataset for analysis.
+  * `3_an1.do` performs age-period-cohort (APC) analysis on ESS data.
+  * `4_an2_robustness.do` runs robustness checks.
+  * `mydirectory.do` loads paths to the folders of the repository in global macros.
+* Markdown files
+  * `codebook.md` is the codebook of the final dataset (based on ESS data).
+  * `README.md` is the file you are currently reading.
 
 
 # 2 Raw data
