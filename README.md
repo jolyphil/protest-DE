@@ -19,7 +19,7 @@ How is the protest behavior of citizens in new democracies influenced by their e
   * `data/` contains empty subfolders where you can save the ESS raw data. Generated data will also be saved there.
   * `figures/` contains empty subfolders where figures will be saved in different formats: GPH, EMF, PDF, and PNG.
   * `logfiles/` is an empty folder where Stata logfiles will be stored.
-  * `programms/` contains a series of do-files. Files with names like `export_*.do` are programms exporting tables and figures. The folder also contains Oesch's do-files to generate social class variables.
+  * `programs/` contains a series of do-files. Files with names like `export_*.do` are programms exporting tables and figures. The folder also contains Oesch's do-files to generate social class variables.
   * `schemes/` contains the file `minimal.scheme`, a Stata scheme I designed to export my figures.
   * `tables/` contains empty subfolders where tables will be saved in TEX or RTF formats.
 * Do-files
