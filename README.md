@@ -110,7 +110,7 @@ A few steps are necessary to run the analysis.
 * Unfortunately, the ESS only provides country-specific data as SPSS portable files (POR).
 * You will need to obtain files in DTA format.
   * The safest way to do this is to open the POR files in SPSS and, from there, to save them as DTA.
-  * Another option (which I have not tried) would be to open the files in R using the `memisc` package and save them back to DTA using the `haven` package.
+  * Another option would be to open the files in R using the `foreign` package and save them back to DTA.
   * Finally, I also make the DTA files available on [my OSF page](https://osf.io/7cjt8/).
 * Once you have downloaded the eight datafiles, place them in their appropriate folder in `data/raw/`.
   * Example: `data/raw/ESS_1/Country-specific data/ESS1csDE.dta`
