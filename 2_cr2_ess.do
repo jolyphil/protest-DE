@@ -181,7 +181,7 @@ replace socyearseast = 11 ///
 	if agemovetoeast < 15 & agemovetoeast != . & age > 25
 replace socyearseast = age - 15 ///
 	if agemovetoeast < 15 & agemovetoeast != . & age >= 15 & age <= 25 
-replace socyearseast = 11 - agemovetoeast ///
+replace socyearseast = 11 - (agemovetoeast - 15) ///
 	if agemovetoeast >= 15 & agemovetoeast <= 25 & age > 25
 replace socyearseast = age - agemovetoeast ///
 	if agemovetoeast >= 15 & agemovetoeast <= 25 & age >= 15 & age <= 25
