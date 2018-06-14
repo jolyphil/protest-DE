@@ -177,15 +177,21 @@ replace socyearseast = 11 if agemovetowest > 25 & agemovetowest != .
 replace socyearseast = 0 if eastintv == 0 & eastbefore1990 == 0
 
 * (4) Lived in the West Germany before 1990, moved to East Germany
-replace socyearseast = 11 if agemovetoeast < 15 & agemovetoeast != .
-replace socyearseast = 26 - agemovetoeast /// 
-	if agemovetoeast >= 15 & agemovetoeast <= 25
+replace socyearseast = 11 ///
+	if agemovetoeast < 15 & agemovetoeast != . & age > 25
+replace socyearseast = age - 15 ///
+	if agemovetoeast < 15 & agemovetoeast != . & age >= 15 & age <= 25 
+replace socyearseast = 11 - agemovetoeast ///
+	if agemovetoeast >= 15 & agemovetoeast <= 25 & age > 25
+replace socyearseast = age - agemovetoeast ///
+	if agemovetoeast >= 15 & agemovetoeast <= 25 & age >= 15 & age <= 25
 replace socyearseast = 0 if agemovetoeast > 25 & agemovetoeast != .
 // tw line socyearseast agemovetoeast, sort
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Lived most formative years in East Germany | --> eastsoc
-gen eastsoc = (socyearseast / soctotyears) > 0.5 if socyearseast != .
+gen eastsoc = (socyearseast / soctotyears) > 0.5 ///
+	if socyearseast != . & soctotyears != 0
 label variable eastsoc "Region of early socialization"
 label values eastsoc eastlb
 
