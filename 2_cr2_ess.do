@@ -191,7 +191,7 @@ replace socyearseast = 0 if agemovetoeast > 25 & agemovetoeast != .
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Lived most formative years in East Germany | --> eastsoc
 gen eastsoc = (socyearseast / soctotyears) > 0.5 ///
-	if socyearseast != . & soctotyears != 0
+	if socyearseast < . & soctotyears != 0
 label variable eastsoc "Region of early socialization"
 label values eastsoc eastlb
 
