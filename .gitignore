@@ -13,6 +13,9 @@
 # figures emf
 *.emf
 
+# figures eps
+*.eps
+
 # figures gph
 *.gph
 
