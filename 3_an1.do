@@ -50,15 +50,23 @@ local lines_2 ""
 local xlab_2 "2002(2)2016"
 local xtitle_2 "Periods"
 
+* Figure number
+local j = 2
+
+/*
 foreach dv of varlist demonstration petition boycott {
-	
+
 	* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 	* Random-intercept model
 
 	meqrlogit `dv' `fe_eq' || _all: R.period || cohort:
 	est store m_`dv'_0 
-	
-	forvalues i=1/2 {
+}
+*/
+forvalues i=1/2 {
+	foreach dv of varlist demonstration petition boycott {
+		
+		local j = `j' + 1 // increment figure number
 		
 		* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 		* Random-slope model
@@ -91,10 +99,12 @@ foreach dv of varlist demonstration petition boycott {
 			ylab(0(-0.2)-0.6) ///
 			ytitle("Effect of socialization in Eastern Germany") ///
 			legend(order(2 "Random effect" 3 "Fixed effect")) ///
-			saving("${figures_gph}fig_`dv'-`level_`i''.gph", replace)
-		capture graph export "${figures_emf}fig_`dv'-`level_`i''.emf", replace
-		graph export "${figures_pdf}fig_`dv'-`level_`i''.pdf", replace
-		graph export "${figures_png}fig_`dv'-`level_`i''.png", replace ///
+			saving("${figures_gph}figure_0`j'_`dv'-`level_`i''.gph", replace)
+			
+		graph export "${figures_emf}figure_0`j'_`dv'-`level_`i''.emf", replace
+		graph export "${figures_eps}figure_0`j'_`dv'-`level_`i''.eps", replace
+		graph export "${figures_pdf}figure_0`j'_`dv'-`level_`i''.pdf", replace
+		graph export "${figures_png}figure_0`j'_`dv'-`level_`i''.png", replace ///
 			width(2750) height(2000)
 		
 		* _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
@@ -109,34 +119,33 @@ do "${programs}export_tab_APC_models_tex.do" /// Table A1 R.-slope cohort: TeX
 	m_demonstration_1 /// Model 1
 	m_petition_1 /// Model 2
 	m_boycott_1 /// Model 3
-	tab_APC_rs_cohort // filename
+	table_A1_APC_rs_cohort // filename
 	
 do "${programs}export_tab_APC_models_rtf.do" /// Table A1 R.-slope cohort: RTF
 	m_demonstration_1 ///
 	m_petition_1 ///
 	m_boycott_1 ///
-	tab_APC_rs_cohort //
+	table_A1_APC_rs_cohort //
 
 do "${programs}export_tab_APC_models_tex.do" /// Table A2 R.-slope period: TeX
 	m_demonstration_2 ///
 	m_petition_2 ///
 	m_boycott_2 ///
-	tab_APC_rs_period //
+	table_A2_APC_rs_period //
 	
 do "${programs}export_tab_APC_models_rtf.do" /// Table A2 R.-slope period: RTF
 	m_demonstration_2 ///
 	m_petition_2 ///
 	m_boycott_2 ///
-	tab_APC_rs_period //
+	table_A2_APC_rs_period //
 * ______________________________________________________________________________
-* Export Graph
-* Note: exports Figure 2
+* Export coefficient plot
 
 do "${programs}export_coefplot.do" ///
 	m_demonstration_1 "Demonstration" ///
 	m_petition_1 "Petition" ///
 	m_boycott_1 "Boycott" ///
-	"fig_coefplot" // filename
+	"figure_02_coefplot" // filename
 
 * ______________________________________________________________________________
 * LR Tests

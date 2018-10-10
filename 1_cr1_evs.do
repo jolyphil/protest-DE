@@ -74,10 +74,11 @@ twoway ///
 		[aweight = weight], clpattern(dash) clcolor(green) fcolor(gs13) blcolor(gs13)), ///
 	ytitle("Having attended a demonstration, ever") xtitle("Year of birth") ///
 	xlabel(1910(20)1970) legend(order(2 "East Germany" 4 "West Germany")) ///
-	saving("${figures_gph}fig_evs_demo.gph", replace)
-	capture graph export "${figures_emf}fig_evs_demo.emf", replace
-	graph export "${figures_pdf}fig_evs_demo.pdf", replace
-	graph export "${figures_png}fig_evs_demo.png", replace ///
+	saving("${figures_gph}figure_01_evs_demo.gph", replace)
+	capture graph export "${figures_emf}figure_01_evs_demo.emf", replace
+	graph export "${figures_eps}figure_01_evs_demo.eps", replace
+	graph export "${figures_pdf}figure_01_evs_demo.pdf", replace
+	graph export "${figures_png}figure_01_evs_demo.png", replace ///
 		width(2750) height(2000)
 		
 * ______________________________________________________________________________

@@ -24,6 +24,9 @@ local controls "i.female i.edu3 i.unemp i.union i.city i.class5 i.land"
 
 * _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
+local i = 1
+local j = 4
+
 foreach dv of varlist demonstration petition boycott {
 	logit `dv' i.eastsoc i.cohort i.period ///
 		i.eastsoc#i.cohort i.eastsoc#i.period `controls'
@@ -41,10 +44,12 @@ foreach dv of varlist demonstration petition boycott {
 		xtitle("Birth cohorts") xlab(1920(10)1980) ///
 		ytitle("Effect of socialization in Eastern Germany") ///
 		title("") ///
-		saving("${figures_gph}fig_`dv'-cohort_FE.gph", replace)
-	capture graph export "${figures_emf}fig_`dv'-cohort_FE.emf", replace
-	graph export "${figures_pdf}fig_`dv'-cohort_FE.pdf", replace
-	graph export "${figures_png}fig_`dv'-cohort_FE.png", replace ///
+		saving("${figures_gph}figure_A`i'_`dv'-cohort_FE.gph", replace)
+		
+	capture graph export "${figures_emf}figure_A`i'_`dv'-cohort_FE.emf", replace
+	graph export "${figures_eps}figure_A`i'_`dv'-cohort_FE.eps", replace
+	graph export "${figures_pdf}figure_A`i'_`dv'-cohort_FE.pdf", replace
+	graph export "${figures_png}figure_A`i'_`dv'-cohort_FE.png", replace ///
 		width(2750) height(2000)
 	
 	est restore m_`dv'
@@ -58,11 +63,17 @@ foreach dv of varlist demonstration petition boycott {
 		xtitle("Periods") xlab(2002(2)2016) ///
 		ytitle("Effect of socialization in Eastern Germany") ///
 		title("") ///
-		saving("${figures_gph}fig_`dv'-period_FE.gph", replace)
-	capture graph export "${figures_emf}fig_`dv'-period_FE.emf", replace
-	graph export "${figures_pdf}fig_`dv'-period_FE.pdf", replace
-	graph export "${figures_png}fig_`dv'-period_FE.png", replace ///
+		saving("${figures_gph}figure_A`j'_`dv'-period_FE.gph", replace)
+		
+	capture graph export "${figures_emf}figure_A`j'_`dv'-period_FE.emf", replace
+	graph export "${figures_eps}figure_A`j'_`dv'-period_FE.eps", replace
+	graph export "${figures_pdf}figure_A`j'_`dv'-period_FE.pdf", replace
+	graph export "${figures_png}figure_A`j'_`dv'-period_FE.png", replace ///
 		width(2750) height(2000)
+	
+	* Increment figure numbers
+	local i = `i' + 1
+	local j = `j' + 1
 }	
 * ______________________________________________________________________________
 * Close

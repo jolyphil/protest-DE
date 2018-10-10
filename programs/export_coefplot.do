@@ -71,6 +71,7 @@ coefplot
 #delimit cr
 
 capture graph export "${figures_emf}`saveas'.emf", replace
+graph export "${figures_eps}`saveas'.eps", replace
 graph export "${figures_pdf}`saveas'.pdf", replace
 graph export "${figures_png}`saveas'.png", replace ///
 	width(2750) height(2000)
